@@ -237,9 +237,9 @@ Human must complete before agents begin:
 **What:** Configure and deploy application to Vercel.
 
 **Acceptance Criteria:**
-- [ ] Application builds successfully on Vercel
-- [ ] Environment variables configured in Vercel dashboard
-- [ ] Google OAuth callback URLs updated for production domain
+- [x] Application builds successfully on Vercel
+- [x] Environment variables configured in Vercel dashboard
+- [x] Google OAuth callback URLs updated for production domain
 - [ ] Sign-in flow works in production
 
 **Files:**
@@ -263,7 +263,7 @@ Human must complete before agents begin:
 - [ ] User sees header with their name/avatar
 - [ ] User sees bottom navigation
 - [ ] Sign out works correctly
-- [ ] Production deployment accessible
+- [x] Production deployment accessible
 
 ---
 
