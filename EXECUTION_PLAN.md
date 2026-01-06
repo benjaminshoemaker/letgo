@@ -192,10 +192,10 @@ Human must complete before agents begin:
 **What:** Build header, bottom navigation, and protected route wrapper.
 
 **Acceptance Criteria:**
-- [ ] Header displays app name and user avatar when signed in
-- [ ] Bottom nav shows Scan and My Items buttons
-- [ ] ProtectedRoute redirects unauthenticated users to sign-in
-- [ ] Layout renders correctly on mobile viewport
+- [x] Header displays app name and user avatar when signed in
+- [x] Bottom nav shows Scan and My Items buttons
+- [x] ProtectedRoute redirects unauthenticated users to sign-in
+- [x] Layout renders correctly on mobile viewport
 
 **Files:**
 - Create: `components/layout/header.tsx` — app header
