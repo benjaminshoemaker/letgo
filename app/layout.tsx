@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { BottomNav } from "@/components/layout/bottom-nav";
 import { Header } from "@/components/layout/header";
+import { Providers } from "@/app/providers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,11 +32,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="flex min-h-dvh flex-col">
-          <Header />
-          <div className="flex-1">{children}</div>
-          <BottomNav />
-        </div>
+        <Providers>
+          <div className="flex min-h-dvh flex-col">
+            <Header />
+            <div className="flex-1">{children}</div>
+            <BottomNav />
+          </div>
+        </Providers>
       </body>
     </html>
   );

@@ -214,10 +214,10 @@ Human must complete before agents begin:
 **What:** Set up React Query and session providers for the app.
 
 **Acceptance Criteria:**
-- [ ] QueryClient configured with default options from spec
-- [ ] SessionProvider wraps the app
-- [ ] Providers component exports combined wrapper
-- [ ] No hydration errors on page load
+- [x] QueryClient configured with default options from spec
+- [x] SessionProvider wraps the app
+- [x] Providers component exports combined wrapper
+- [x] No hydration errors on page load
 
 **Files:**
 - Create: `lib/query-client.ts` — React Query client configuration
