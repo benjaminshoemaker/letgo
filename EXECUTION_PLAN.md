@@ -78,10 +78,10 @@ Human must complete before agents begin:
 **What:** Install and configure shadcn/ui with initial components needed for MVP.
 
 **Acceptance Criteria:**
-- [ ] shadcn/ui CLI initialized with default configuration
-- [ ] Button, Card, Dialog, Select, Input components installed
-- [ ] Components render correctly in a test page
-- [ ] `lib/utils.ts` with `cn()` helper exists
+- [x] shadcn/ui CLI initialized with default configuration
+- [x] Button, Card, Dialog, Select, Input components installed
+- [x] Components render correctly in a test page
+- [x] `lib/utils.ts` with `cn()` helper exists
 
 **Files:**
 - Create: `components.json` — shadcn/ui configuration
