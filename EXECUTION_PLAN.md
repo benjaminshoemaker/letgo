@@ -53,11 +53,11 @@ Human must complete before agents begin:
 **What:** Create new Next.js project with TypeScript, Tailwind, and ESLint configuration.
 
 **Acceptance Criteria:**
-- [ ] Next.js 14.x project created with App Router
-- [ ] TypeScript configured with strict mode
-- [ ] Tailwind CSS configured with default theme
-- [ ] ESLint configured with Next.js recommended rules
-- [ ] Project runs locally with `npm run dev`
+- [x] Next.js 14.x project created with App Router
+- [x] TypeScript configured with strict mode
+- [x] Tailwind CSS configured with default theme
+- [x] ESLint configured with Next.js recommended rules
+- [x] Project runs locally with `npm run dev`
 
 **Files:**
 - Create: `package.json` — project dependencies and scripts
