@@ -169,10 +169,10 @@ Human must complete before agents begin:
 **What:** Build sign-in and error pages for authentication flow.
 
 **Acceptance Criteria:**
-- [ ] Sign-in page displays Google sign-in button
-- [ ] Error page displays authentication errors gracefully
-- [ ] Sign-in redirects to home on success
-- [ ] Unauthenticated users redirected to sign-in
+- [x] Sign-in page displays Google sign-in button
+- [x] Error page displays authentication errors gracefully
+- [x] Sign-in redirects to home on success
+- [x] Unauthenticated users redirected to sign-in
 
 **Files:**
 - Create: `app/auth/signin/page.tsx` — sign-in page
