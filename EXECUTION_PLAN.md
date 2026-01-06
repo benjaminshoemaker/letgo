@@ -147,11 +147,11 @@ Human must complete before agents begin:
 **What:** Set up NextAuth.js with Google OAuth provider and Prisma adapter.
 
 **Acceptance Criteria:**
-- [ ] NextAuth route handler responds at `/api/auth/*`
-- [ ] Google OAuth provider configured
-- [ ] Prisma adapter connected to database
-- [ ] Session callback includes user ID
-- [ ] `lib/auth.ts` exports `getSession` and `requireAuth` helpers
+- [x] NextAuth route handler responds at `/api/auth/*`
+- [x] Google OAuth provider configured
+- [x] Prisma adapter connected to database
+- [x] Session callback includes user ID
+- [x] `lib/auth.ts` exports `getSession` and `requireAuth` helpers
 
 **Files:**
 - Create: `app/api/auth/[...nextauth]/route.ts` — NextAuth route handler
