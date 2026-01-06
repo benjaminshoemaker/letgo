@@ -105,10 +105,10 @@ Human must complete before agents begin:
 **What:** Set up Prisma ORM with Neon PostgreSQL connection.
 
 **Acceptance Criteria:**
-- [ ] Prisma CLI installed and initialized
-- [ ] Database connection successful with `npx prisma db push`
-- [ ] Prisma Client generated and importable
-- [ ] `lib/prisma.ts` exports singleton client instance
+- [x] Prisma CLI installed and initialized
+- [x] Database connection successful with `npx prisma db push`
+- [x] Prisma Client generated and importable
+- [x] `lib/prisma.ts` exports singleton client instance
 
 **Files:**
 - Create: `prisma/schema.prisma` — empty schema with datasource config
