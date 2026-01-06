@@ -126,10 +126,10 @@ Human must complete before agents begin:
 **What:** Add NextAuth.js required models to Prisma schema.
 
 **Acceptance Criteria:**
-- [ ] User, Account, Session, VerificationToken models defined
-- [ ] All required fields and relations present per NextAuth spec
-- [ ] Indexes created for userId and email fields
-- [ ] Migration runs successfully
+- [x] User, Account, Session, VerificationToken models defined
+- [x] All required fields and relations present per NextAuth spec
+- [x] Indexes created for userId and email fields
+- [x] Migration runs successfully
 
 **Files:**
 - Modify: `prisma/schema.prisma` — add auth models
