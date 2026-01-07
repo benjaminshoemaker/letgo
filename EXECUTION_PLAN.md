@@ -240,7 +240,7 @@ Human must complete before agents begin:
 - [x] Application builds successfully on Vercel
 - [x] Environment variables configured in Vercel dashboard
 - [x] Google OAuth callback URLs updated for production domain
-- [ ] Sign-in flow works in production
+- [x] Sign-in flow works in production
 
 **Files:**
 - Modify: `next.config.js` — add any Vercel-specific config if needed
@@ -259,10 +259,10 @@ Human must complete before agents begin:
 - [x] TypeScript compilation succeeds
 
 **Manual Verification:**
-- [ ] User can sign in with Google
-- [ ] User sees header with their name/avatar
-- [ ] User sees bottom navigation
-- [ ] Sign out works correctly
+- [x] User can sign in with Google
+- [x] User sees header with their name/avatar
+- [x] User sees bottom navigation
+- [x] Sign out works correctly
 - [x] Production deployment accessible
 
 ---
