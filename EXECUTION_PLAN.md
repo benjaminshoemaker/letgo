@@ -446,11 +446,11 @@ Human must complete before agents begin:
 **What:** Build system prompt and user prompt builder for item scanning.
 
 **Acceptance Criteria:**
-- [ ] System prompt includes all recommendation logic from spec
-- [ ] System prompt specifies JSON response format
-- [ ] System prompt includes hazard detection rules
-- [ ] `buildUserPrompt` function accepts condition and optional manualName
-- [ ] Prompts exported for use in scan service
+- [x] System prompt includes all recommendation logic from spec
+- [x] System prompt specifies JSON response format
+- [x] System prompt includes hazard detection rules
+- [x] `buildUserPrompt` function accepts condition and optional manualName
+- [x] Prompts exported for use in scan service
 
 **Files:**
 - Create: `lib/ai/scan-prompt.ts` — prompt definitions
