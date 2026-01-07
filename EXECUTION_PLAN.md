@@ -575,11 +575,11 @@ Human must complete before agents begin:
 **What:** Build React Query mutation hook for scanning items.
 
 **Acceptance Criteria:**
-- [ ] `useScanItem` mutation calls POST /api/scan
-- [ ] Handles loading, success, and error states
-- [ ] Invalidates items list query on success
-- [ ] Exposes LOW_CONFIDENCE error for fallback UI
-- [ ] Returns typed scan result
+- [x] `useScanItem` mutation calls POST /api/scan
+- [x] Handles loading, success, and error states
+- [x] Invalidates items list query on success
+- [x] Exposes LOW_CONFIDENCE error for fallback UI
+- [x] Returns typed scan result
 
 **Files:**
 - Create: `hooks/use-scan.ts` — scan mutation hook
