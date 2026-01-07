@@ -554,12 +554,12 @@ Human must complete before agents begin:
 **What:** Build component that displays AI recommendation.
 
 **Acceptance Criteria:**
-- [ ] Shows identified item name
-- [ ] Displays recommendation badge (SELL/DONATE/RECYCLE/DISPOSE) with appropriate color
-- [ ] Shows reasoning text
-- [ ] Displays estimated value range for SELL recommendations
-- [ ] Renders guidance as markdown
-- [ ] Shows hazard warning banner if isHazardous is true
+- [x] Shows identified item name
+- [x] Displays recommendation badge (SELL/DONATE/RECYCLE/DISPOSE) with appropriate color
+- [x] Shows reasoning text
+- [x] Displays estimated value range for SELL recommendations
+- [x] Renders guidance as markdown
+- [x] Shows hazard warning banner if isHazardous is true
 
 **Files:**
 - Create: `components/scan/recommendation-card.tsx` — recommendation display
