@@ -354,11 +354,11 @@ Human must complete before agents begin:
 **What:** Build 4-option condition selector with helper text.
 
 **Acceptance Criteria:**
-- [ ] Four options: Excellent, Good, Fair, Poor
-- [ ] Each option has brief helper text
-- [ ] Only one option selectable at a time
-- [ ] Selected option visually highlighted
-- [ ] Returns condition enum value on selection
+- [x] Four options: Excellent, Good, Fair, Poor
+- [x] Each option has brief helper text
+- [x] Only one option selectable at a time
+- [x] Selected option visually highlighted
+- [x] Returns condition enum value on selection
 
 **Files:**
 - Create: `components/scan/condition-selector.tsx` — condition selector
