@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 
-export type ItemCondition = "EXCELLENT" | "GOOD" | "FAIR" | "POOR";
+import type { ItemCondition } from "@/lib/scan-types";
 
 const OPTIONS: Array<{ value: ItemCondition; label: string; help: string }> = [
   {
@@ -60,4 +60,3 @@ export function ConditionSelector({
     </section>
   );
 }
-

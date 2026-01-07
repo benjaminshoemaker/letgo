@@ -596,11 +596,11 @@ Human must complete before agents begin:
 **What:** Connect scan page to API and display recommendation.
 
 **Acceptance Criteria:**
-- [ ] Submitting scan calls API with image URL and condition
-- [ ] Shows loading state during AI processing
-- [ ] Displays recommendation card on success
-- [ ] Shows "Add to My Items" button after recommendation
-- [ ] Handles errors with user-friendly message
+- [x] Submitting scan calls API with image URL and condition
+- [x] Shows loading state during AI processing
+- [x] Displays recommendation card on success
+- [x] Shows "Add to My Items" button after recommendation
+- [x] Handles errors with user-friendly message
 
 **Files:**
 - Modify: `app/scan/page.tsx` — integrate API and recommendation display

@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { Recommendation, ScanResult } from "@/lib/scan-types";
+import type { Recommendation } from "@/lib/scan-types";
 import { cn } from "@/lib/utils";
 
 function formatUsdFromCents(cents: number): string {
@@ -29,7 +29,18 @@ function badgeClass(recommendation: Recommendation): string {
   }
 }
 
-export function RecommendationCard({ result }: { result: ScanResult }) {
+export type RecommendationCardData = {
+  identifiedName: string;
+  recommendation: Recommendation;
+  reasoning: string;
+  estimatedValueLow: number | null;
+  estimatedValueHigh: number | null;
+  guidance: string;
+  isHazardous: boolean;
+  hazardWarning: string | null;
+};
+
+export function RecommendationCard({ result }: { result: RecommendationCardData }) {
   const showValue =
     result.recommendation === "SELL" &&
     result.estimatedValueLow != null &&
@@ -73,4 +84,3 @@ export function RecommendationCard({ result }: { result: ScanResult }) {
     </Card>
   );
 }
-
