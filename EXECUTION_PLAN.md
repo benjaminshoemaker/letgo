@@ -486,11 +486,11 @@ Human must complete before agents begin:
 **What:** Build retry logic with exponential backoff for AI calls.
 
 **Acceptance Criteria:**
-- [ ] `withRetry` function retries up to 2 times
-- [ ] Uses exponential backoff (1s, 2s delays)
-- [ ] Does not retry on LOW_CONFIDENCE errors
-- [ ] Returns result on success
-- [ ] Throws last error after all retries exhausted
+- [x] `withRetry` function retries up to 2 times
+- [x] Uses exponential backoff (1s, 2s delays)
+- [x] Does not retry on LOW_CONFIDENCE errors
+- [x] Returns result on success
+- [x] Throws last error after all retries exhausted
 
 **Files:**
 - Create: `lib/ai/retry.ts` — retry utility
