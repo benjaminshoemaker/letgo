@@ -25,11 +25,11 @@ Workflow guidelines for AI agents executing tasks from EXECUTION_PLAN.md.
 HUMAN (Orchestrator)
 ├── Completes pre-phase setup
 ├── Assigns tasks from EXECUTION_PLAN.md
-├── Reviews completed work
-└── Approves phase checkpoints
+├── Reviews and approves at phase checkpoints
 
 AGENT (Executor)
 ├── Executes one task at a time
+├── Works in git branch
 ├── Follows TDD: tests first, then implementation
 ├── Runs verification against acceptance criteria
 └── Reports completion or blockers
