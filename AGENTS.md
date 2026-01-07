@@ -154,6 +154,8 @@ Commit: {hash or "ready to commit"}
 | Branch | `task-{id}` (e.g., `task-1.1.A`) |
 | Commit | `task({id}): {description}` (e.g., `task(1.1.A): initialize next.js project`) |
 
+**Branch workflow:** Create a fresh `task-{id}` branch from the latest `main` before making changes for a task, and keep one task per branch.
+
 **Commit frequency:** One commit per task, after all acceptance criteria met.
 
 ---
