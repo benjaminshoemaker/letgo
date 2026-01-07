@@ -334,11 +334,11 @@ Human must complete before agents begin:
 **What:** Build component for capturing or uploading photos on mobile.
 
 **Acceptance Criteria:**
-- [ ] Primary button opens camera on mobile devices
-- [ ] Secondary option allows file upload from gallery
-- [ ] Accepts only image files (JPEG, PNG, WebP)
-- [ ] Shows image preview after capture/selection
-- [ ] Preview can be dismissed to retake
+- [x] Primary button opens camera on mobile devices
+- [x] Secondary option allows file upload from gallery
+- [x] Accepts only image files (JPEG, PNG, WebP)
+- [x] Shows image preview after capture/selection
+- [x] Preview can be dismissed to retake
 
 **Files:**
 - Create: `components/scan/camera-capture.tsx` — camera/upload component
