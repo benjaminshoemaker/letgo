@@ -311,10 +311,10 @@ Human must complete before agents begin:
 **What:** Build client-side image compression and upload functions.
 
 **Acceptance Criteria:**
-- [ ] `compressImage` reduces image to max 1200px and 80% JPEG quality
-- [ ] `uploadImage` fetches presigned URL and uploads to R2
-- [ ] Upload returns public image URL on success
-- [ ] Compression works on JPEG, PNG, and WebP inputs
+- [x] `compressImage` reduces image to max 1200px and 80% JPEG quality
+- [x] `uploadImage` fetches presigned URL and uploads to R2
+- [x] Upload returns public image URL on success
+- [x] Compression works on JPEG, PNG, and WebP inputs
 
 **Files:**
 - Create: `lib/image-compression.ts` — compression utility
