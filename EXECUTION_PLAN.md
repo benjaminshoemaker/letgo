@@ -614,8 +614,8 @@ Human must complete before agents begin:
 ### Phase 3 Checkpoint
 
 **Automated:**
-- [ ] `npm run build` succeeds
-- [ ] `npm run lint` passes
+- [x] `npm run build` succeeds
+- [x] `npm run lint` passes
 
 **Manual Verification:**
 - [ ] Scan a recognizable item (e.g., a phone)
