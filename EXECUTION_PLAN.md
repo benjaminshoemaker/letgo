@@ -374,11 +374,11 @@ Human must complete before agents begin:
 **What:** Build the main scan page combining capture and condition selection.
 
 **Acceptance Criteria:**
-- [ ] Page shows camera capture component initially
-- [ ] After image captured, shows condition selector
-- [ ] Submit button disabled until image and condition selected
-- [ ] Shows loading state during upload
-- [ ] Displays uploaded image URL (temporary, for testing)
+- [x] Page shows camera capture component initially
+- [x] After image captured, shows condition selector
+- [x] Submit button disabled until image and condition selected
+- [x] Shows loading state during upload
+- [x] Displays uploaded image URL (temporary, for testing)
 
 **Files:**
 - Create: `app/scan/page.tsx` — scan page
