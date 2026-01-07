@@ -530,12 +530,12 @@ Human must complete before agents begin:
 **What:** Build POST /api/scan endpoint that processes items.
 
 **Acceptance Criteria:**
-- [ ] Requires authentication
-- [ ] Validates imageUrl and condition in request body
-- [ ] Calls AI scan service with retry
-- [ ] Creates Item record in database on success
-- [ ] Returns item data and rate limit remaining
-- [ ] Returns 422 with LOW_CONFIDENCE code when AI confidence is low
+- [x] Requires authentication
+- [x] Validates imageUrl and condition in request body
+- [x] Calls AI scan service with retry
+- [x] Creates Item record in database on success
+- [x] Returns item data and rate limit remaining
+- [x] Returns 422 with LOW_CONFIDENCE code when AI confidence is low
 
 **Files:**
 - Create: `app/api/scan/route.ts` — scan endpoint
