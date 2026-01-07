@@ -10,30 +10,27 @@ export async function scanItem(
   condition: string,
   manualName?: string
 ): Promise<ScanResult> {
-  const response = await openai.chat.completions.create({
+  const response = await openai.responses.create({
     model: AI_MODEL,
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
+    input: [
+      {
+        role: "system",
+        content: [{ type: "input_text", text: SYSTEM_PROMPT }],
+      },
       {
         role: "user",
         content: [
-          {
-            type: "image_url",
-            image_url: { url: imageUrl, detail: "high" },
-          },
-          {
-            type: "text",
-            text: buildUserPrompt(condition, manualName),
-          },
+          { type: "input_image", image_url: imageUrl, detail: "high" },
+          { type: "input_text", text: buildUserPrompt(condition, manualName) },
         ],
       },
     ],
-    response_format: { type: "json_object" },
-    max_tokens: 1000,
+    reasoning: { effort: "low" },
+    max_output_tokens: 1000,
     temperature: 0.3,
   });
 
-  const content = response.choices[0]?.message?.content;
+  const content = response.output_text?.trim();
   if (!content) {
     throw new Error("No response from AI");
   }
@@ -49,4 +46,3 @@ export async function scanItem(
 
   return result;
 }
-
