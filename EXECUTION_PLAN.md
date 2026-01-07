@@ -466,11 +466,11 @@ Human must complete before agents begin:
 **What:** Build service that calls OpenAI with image and returns structured recommendation.
 
 **Acceptance Criteria:**
-- [ ] `scanItem` function accepts imageUrl, condition, and optional manualName
-- [ ] Calls OpenAI with vision capability and JSON response format
-- [ ] Parses response into typed ScanResult interface
-- [ ] Throws error with code "LOW_CONFIDENCE" if confidence is LOW and no manualName
-- [ ] Returns complete recommendation data
+- [x] `scanItem` function accepts imageUrl, condition, and optional manualName
+- [x] Calls OpenAI with vision capability and JSON response format
+- [x] Parses response into typed ScanResult interface
+- [x] Throws error with code "LOW_CONFIDENCE" if confidence is LOW and no manualName
+- [x] Returns complete recommendation data
 
 **Files:**
 - Create: `lib/ai/scan-service.ts` — scan service
