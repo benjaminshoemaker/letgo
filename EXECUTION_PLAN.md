@@ -397,12 +397,12 @@ Human must complete before agents begin:
 - [x] `npm run lint` passes
 
 **Manual Verification:**
-- [ ] Camera opens on mobile device
-- [ ] Image can be uploaded from gallery
-- [ ] Image preview displays correctly
-- [ ] Condition selector works
-- [ ] Image uploads to R2 successfully
-- [ ] Uploaded image accessible via public URL
+- [x] Camera opens on mobile device
+- [x] Image can be uploaded from gallery
+- [x] Image preview displays correctly
+- [x] Condition selector works
+- [x] Image uploads to R2 successfully
+- [x] Uploaded image accessible via public URL
 
 ---
 
