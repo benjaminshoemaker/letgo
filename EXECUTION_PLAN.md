@@ -414,8 +414,8 @@ Human must complete before agents begin:
 
 Human must complete before agents begin:
 
-- [ ] Obtain OpenAI API key with access to gpt-5-nano
-- [ ] Add `OPENAI_API_KEY` to environment variables (local and Vercel)
+- [x] Obtain OpenAI API key with access to gpt-5-nano
+- [x] Add `OPENAI_API_KEY` to environment variables (local and Vercel)
 
 ---
 
@@ -426,10 +426,10 @@ Human must complete before agents begin:
 **What:** Set up OpenAI SDK client singleton.
 
 **Acceptance Criteria:**
-- [ ] OpenAI client configured with API key from environment
-- [ ] Client exported from `lib/openai.ts`
-- [ ] AI_MODEL constant set to "gpt-5-nano"
-- [ ] Client can be imported without errors
+- [x] OpenAI client configured with API key from environment
+- [x] Client exported from `lib/openai.ts`
+- [x] AI_MODEL constant set to "gpt-5-nano"
+- [x] Client can be imported without errors
 
 **Files:**
 - Create: `lib/openai.ts` — OpenAI client setup
