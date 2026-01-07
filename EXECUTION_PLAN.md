@@ -275,11 +275,11 @@ Human must complete before agents begin:
 
 Human must complete before agents begin:
 
-- [ ] Create Cloudflare R2 bucket named `letgo-images`
-- [ ] Configure R2 CORS policy to allow uploads from app domain
-- [ ] Set up R2 public access domain (or use presigned URLs for reads)
-- [ ] Obtain R2 credentials: `R2_ENDPOINT`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME`, `R2_PUBLIC_URL`
-- [ ] Add R2 environment variables to Vercel
+- [x] Create Cloudflare R2 bucket named `letgo-images`
+- [x] Configure R2 CORS policy to allow uploads from app domain
+- [x] Set up R2 public access domain (or use presigned URLs for reads)
+- [x] Obtain R2 credentials: `R2_ENDPOINT`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME`, `R2_PUBLIC_URL`
+- [x] Add R2 environment variables to Vercel
 
 ---
 
@@ -290,11 +290,11 @@ Human must complete before agents begin:
 **What:** Build API endpoint that generates presigned URLs for R2 uploads.
 
 **Acceptance Criteria:**
-- [ ] GET `/api/upload` requires authentication
-- [ ] Returns presigned uploadUrl, public imageUrl, and expiresAt
-- [ ] Presigned URL valid for 5 minutes
-- [ ] File path includes user ID for scoping
-- [ ] Returns 400 if filename or contentType missing
+- [x] GET `/api/upload` requires authentication
+- [x] Returns presigned uploadUrl, public imageUrl, and expiresAt
+- [x] Presigned URL valid for 5 minutes
+- [x] File path includes user ID for scoping
+- [x] Returns 400 if filename or contentType missing
 
 **Files:**
 - Create: `app/api/upload/route.ts` — presigned URL endpoint
