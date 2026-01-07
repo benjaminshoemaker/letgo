@@ -508,11 +508,11 @@ Human must complete before agents begin:
 **What:** Add Item model to Prisma schema with all fields.
 
 **Acceptance Criteria:**
-- [ ] Item model has all fields from spec (id, userId, photoUrl, etc.)
-- [ ] ItemCondition, Recommendation, ItemStatus enums defined
-- [ ] Foreign key relation to User with cascade delete
-- [ ] Indexes on userId, userId+status, createdAt
-- [ ] Migration runs successfully
+- [x] Item model has all fields from spec (id, userId, photoUrl, etc.)
+- [x] ItemCondition, Recommendation, ItemStatus enums defined
+- [x] Foreign key relation to User with cascade delete
+- [x] Indexes on userId, userId+status, createdAt
+- [x] Migration runs successfully
 
 **Files:**
 - Modify: `prisma/schema.prisma` — add Item model and enums

@@ -19,6 +19,7 @@ model User {
 
   accounts Account[]
   sessions Session[]
+  items    Item[]
 
   @@index([email])
 }
@@ -60,4 +61,63 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Item {
+  id               String        @id @default(cuid())
+  userId           String
+
+  // Image
+  photoUrl         String
+
+  // Identification
+  identifiedName   String
+  userOverrideName String?
+  condition        ItemCondition
+
+  // Recommendation
+  recommendation   Recommendation
+  reasoning        String        @db.Text
+  estimatedValueLow Int? // cents
+  estimatedValueHigh Int? // cents
+  guidance         String        @db.Text
+
+  // Hazard
+  isHazardous      Boolean       @default(false)
+  hazardWarning    String?       @db.Text
+
+  // Status tracking
+  status           ItemStatus    @default(TODO)
+
+  // Timestamps
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, status])
+  @@index([createdAt])
+}
+
+enum ItemCondition {
+  EXCELLENT
+  GOOD
+  FAIR
+  POOR
+}
+
+enum Recommendation {
+  SELL
+  DONATE
+  RECYCLE
+  DISPOSE
+}
+
+enum ItemStatus {
+  TODO
+  SOLD
+  DONATED
+  RECYCLED
+  TRASHED
 }
