@@ -906,11 +906,11 @@ None required.
 **What:** Build page showing full item details with status management.
 
 **Acceptance Criteria:**
-- [ ] Shows full-size image
-- [ ] Displays complete recommendation card
-- [ ] Includes status dropdown
-- [ ] Delete button with confirmation
-- [ ] Back navigation to list
+- [x] Shows full-size image
+- [x] Displays complete recommendation card
+- [x] Includes status dropdown
+- [x] Delete button with confirmation
+- [x] Back navigation to list
 
 **Files:**
 - Create: `app/items/[id]/page.tsx` — item detail page
