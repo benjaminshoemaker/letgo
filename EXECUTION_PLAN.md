@@ -736,11 +736,11 @@ None required.
 **What:** Build GET /api/items endpoint with filtering and pagination.
 
 **Acceptance Criteria:**
-- [ ] Requires authentication
-- [ ] Returns only items belonging to current user
-- [ ] Supports status filter query parameter
-- [ ] Supports limit and cursor pagination
-- [ ] Returns items, nextCursor, hasMore, totalCount
+- [x] Requires authentication
+- [x] Returns only items belonging to current user
+- [x] Supports status filter query parameter
+- [x] Supports limit and cursor pagination
+- [x] Returns items, nextCursor, hasMore, totalCount
 
 **Files:**
 - Create: `app/api/items/route.ts` — items list endpoint
