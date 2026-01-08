@@ -707,8 +707,8 @@ None required.
 ### Phase 4 Checkpoint
 
 **Automated:**
-- [ ] `npm run build` succeeds
-- [ ] `npm run lint` passes
+- [x] `npm run build` succeeds
+- [x] `npm run lint` passes
 
 **Manual Verification:**
 - [ ] Scan an ambiguous/unusual item
