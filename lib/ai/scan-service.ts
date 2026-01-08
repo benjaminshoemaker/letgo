@@ -28,7 +28,6 @@ export async function scanItem(
     reasoning: { effort: "low" },
     text: { format: { type: "json_object" } },
     max_output_tokens: 1000,
-    temperature: 0.3,
   });
 
   if (response.status !== "completed") {
