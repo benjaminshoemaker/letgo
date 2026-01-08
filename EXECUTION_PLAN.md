@@ -822,11 +822,11 @@ None required.
 **What:** Build filter tabs for items list.
 
 **Acceptance Criteria:**
-- [ ] Three tabs: All, To Do, Done
-- [ ] Done includes SOLD, DONATED, RECYCLED, TRASHED
-- [ ] Active tab visually indicated
-- [ ] Tapping tab updates filter
-- [ ] Tab counts show number of items (optional)
+- [x] Three tabs: All, To Do, Done
+- [x] Done includes SOLD, DONATED, RECYCLED, TRASHED
+- [x] Active tab visually indicated
+- [x] Tapping tab updates filter
+- [x] Tab counts show number of items (optional)
 
 **Files:**
 - Create: `components/items/item-filters.tsx` — filter tabs
