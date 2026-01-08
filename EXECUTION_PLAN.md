@@ -967,7 +967,7 @@ None required.
 
 Human must complete before agents begin:
 
-- [ ] Add `DAILY_SCAN_LIMIT=50` to environment variables
+- [x] Add `DAILY_SCAN_LIMIT=50` to environment variables
 
 ---
 
@@ -1103,11 +1103,11 @@ Human must complete before agents begin:
 - [x] `npm run lint` passes
 
 **Manual Verification:**
-- [ ] Remaining scans displays correctly
-- [ ] After scanning, count decreases
-- [ ] At limit, scan is blocked with message
-- [ ] Reset time displayed correctly
-- [ ] Count resets on new day
+- [x] Remaining scans displays correctly
+- [x] After scanning, count decreases
+- [x] At limit, scan is blocked with message
+- [x] Reset time displayed correctly
+- [x] Count resets on new day
 
 ---
 
