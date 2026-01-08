@@ -47,6 +47,7 @@ export function useScanItem() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: queryKeys.items.all });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.userStats });
     },
   });
 }
@@ -63,6 +64,7 @@ export function useManualScanItem() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: queryKeys.items.all });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.userStats });
     },
   });
 }

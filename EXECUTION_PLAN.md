@@ -1060,10 +1060,10 @@ Human must complete before agents begin:
 **What:** Build React Query hook for user stats.
 
 **Acceptance Criteria:**
-- [ ] `useUserStats` fetches from /api/user/stats
-- [ ] Returns scansRemaining and resetTime
-- [ ] Refetches after scan mutation
-- [ ] Handles loading state
+- [x] `useUserStats` fetches from /api/user/stats
+- [x] Returns scansRemaining and resetTime
+- [x] Refetches after scan mutation
+- [x] Handles loading state
 
 **Files:**
 - Create: `hooks/use-user-stats.ts` — user stats hook
