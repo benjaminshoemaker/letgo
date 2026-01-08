@@ -998,10 +998,10 @@ Human must complete before agents begin:
 **What:** Add scan tracking fields to User model.
 
 **Acceptance Criteria:**
-- [ ] scanCountToday field added with default 0
-- [ ] scanCountDate field added with default now()
-- [ ] Migration runs successfully
-- [ ] Existing users get default values
+- [x] scanCountToday field added with default 0
+- [x] scanCountDate field added with default now()
+- [x] Migration runs successfully
+- [x] Existing users get default values
 
 **Files:**
 - Modify: `prisma/schema.prisma` — add rate limit fields to User
