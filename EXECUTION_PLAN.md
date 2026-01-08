@@ -618,12 +618,12 @@ Human must complete before agents begin:
 - [x] `npm run lint` passes
 
 **Manual Verification:**
-- [ ] Scan a recognizable item (e.g., a phone)
-- [ ] AI identifies item correctly
-- [ ] Recommendation displays with reasoning
-- [ ] Value estimate shows for sellable items
-- [ ] Hazard warning appears for batteries/electronics
-- [ ] Item saved to database
+- [x] Scan a recognizable item (e.g., a phone)
+- [x] AI identifies item correctly
+- [x] Recommendation displays with reasoning
+- [x] Value estimate shows for sellable items
+- [x] Hazard warning appears for batteries/electronics
+- [x] Item saved to database
 
 ---
 
