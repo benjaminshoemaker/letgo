@@ -946,8 +946,8 @@ None required.
 ### Phase 5 Checkpoint
 
 **Automated:**
-- [ ] `npm run build` succeeds
-- [ ] `npm run lint` passes
+- [x] `npm run build` succeeds
+- [x] `npm run lint` passes
 
 **Manual Verification:**
 - [ ] Items list shows saved items
