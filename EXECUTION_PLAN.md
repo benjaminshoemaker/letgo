@@ -644,11 +644,11 @@ None required.
 **What:** Build text input for manual item identification.
 
 **Acceptance Criteria:**
-- [ ] Text input for item name
-- [ ] Submit button to retry with manual name
-- [ ] Displays message explaining AI couldn't identify
-- [ ] Input validation (non-empty)
-- [ ] Returns manual name on submit
+- [x] Text input for item name
+- [x] Submit button to retry with manual name
+- [x] Displays message explaining AI couldn't identify
+- [x] Input validation (non-empty)
+- [x] Returns manual name on submit
 
 **Files:**
 - Create: `components/scan/manual-input.tsx` — manual input component
