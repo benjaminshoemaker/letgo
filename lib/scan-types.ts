@@ -4,6 +4,8 @@ export type ScanConfidence = "HIGH" | "MEDIUM" | "LOW";
 
 export type Recommendation = "SELL" | "DONATE" | "RECYCLE" | "DISPOSE";
 
+export type ItemStatus = "TODO" | "SOLD" | "DONATED" | "RECYCLED" | "TRASHED";
+
 export interface ScanResult {
   identifiedName: string;
   confidence: ScanConfidence;
@@ -15,4 +17,3 @@ export interface ScanResult {
   isHazardous: boolean;
   hazardWarning: string | null;
 }
-

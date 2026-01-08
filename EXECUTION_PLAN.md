@@ -778,11 +778,11 @@ None required.
 **What:** Build React Query hooks for items data.
 
 **Acceptance Criteria:**
-- [ ] `useItems` fetches items list with optional status filter
-- [ ] `useItem` fetches single item by ID
-- [ ] `useUpdateItemStatus` mutation updates status
-- [ ] `useDeleteItem` mutation deletes item
-- [ ] All mutations invalidate items list queries
+- [x] `useItems` fetches items list with optional status filter
+- [x] `useItem` fetches single item by ID
+- [x] `useUpdateItemStatus` mutation updates status
+- [x] `useDeleteItem` mutation deletes item
+- [x] All mutations invalidate items list queries
 
 **Files:**
 - Create: `hooks/use-items.ts` — items query and mutation hooks

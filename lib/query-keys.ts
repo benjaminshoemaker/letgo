@@ -1,4 +1,9 @@
 export const queryKeys = {
-  items: ["items"] as const,
+  items: {
+    all: ["items"] as const,
+    lists: () => [...queryKeys.items.all, "list"] as const,
+    list: (status: string) => [...queryKeys.items.lists(), { status }] as const,
+    details: () => [...queryKeys.items.all, "detail"] as const,
+    detail: (id: string) => [...queryKeys.items.details(), id] as const,
+  },
 } as const;
-

@@ -46,7 +46,7 @@ export function useScanItem() {
       });
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: queryKeys.items });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.items.all });
     },
   });
 }
@@ -62,7 +62,7 @@ export function useManualScanItem() {
       });
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: queryKeys.items });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.items.all });
     },
   });
 }
