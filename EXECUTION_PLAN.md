@@ -928,11 +928,11 @@ None required.
 **What:** Connect scan flow to items list.
 
 **Acceptance Criteria:**
-- [ ] "Add to My Items" button on recommendation card
-- [ ] Button navigates to items list after save
-- [ ] New item appears in items list
-- [ ] Success toast/feedback shown
-- [ ] Option to scan another item
+- [x] "Add to My Items" button on recommendation card
+- [x] Button navigates to items list after save
+- [x] New item appears in items list
+- [x] Success toast/feedback shown
+- [x] Option to scan another item
 
 **Files:**
 - Modify: `app/scan/page.tsx` — add save flow and navigation

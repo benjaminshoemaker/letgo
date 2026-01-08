@@ -1,9 +1,10 @@
 "use client";
 
+import type { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Recommendation } from "@/lib/scan-types";
 import { cn } from "@/lib/utils";
 
@@ -40,7 +41,13 @@ export type RecommendationCardData = {
   hazardWarning: string | null;
 };
 
-export function RecommendationCard({ result }: { result: RecommendationCardData }) {
+export function RecommendationCard({
+  result,
+  footer,
+}: {
+  result: RecommendationCardData;
+  footer?: ReactNode;
+}) {
   const showValue =
     result.recommendation === "SELL" &&
     result.estimatedValueLow != null &&
@@ -81,6 +88,7 @@ export function RecommendationCard({ result }: { result: RecommendationCardData 
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{result.guidance}</ReactMarkdown>
         </div>
       </CardContent>
+      {footer ? <CardFooter className="flex gap-2">{footer}</CardFooter> : null}
     </Card>
   );
 }

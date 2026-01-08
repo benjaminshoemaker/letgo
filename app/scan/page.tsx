@@ -8,7 +8,8 @@ export default async function ScanPage() {
         <h1 className="text-2xl font-semibold tracking-tight">Scan</h1>
         <p className="text-sm text-foreground/70">
           Take a photo (or upload one), choose the condition, and we’ll suggest what to do next. If we
-          can’t identify the item, you can enter a name to retry.
+          can’t identify the item, you can enter a name to retry. Save results to “My Items” to track
+          them later.
         </p>
         <ScanPageClient />
       </main>

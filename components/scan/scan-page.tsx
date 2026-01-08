@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { CameraCapture } from "@/components/scan/camera-capture";
 import { ConditionSelector } from "@/components/scan/condition-selector";
@@ -14,6 +14,7 @@ import type { ItemCondition } from "@/lib/scan-types";
 import { uploadImage } from "@/lib/upload";
 
 export function ScanPageClient() {
+  const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [condition, setCondition] = useState<ItemCondition | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -136,10 +137,21 @@ export function ScanPageClient() {
               isHazardous: result.isHazardous,
               hazardWarning: result.hazardWarning,
             }}
+            footer={
+              <>
+                <Button
+                  onClick={() => router.push("/items?added=1")}
+                  type="button"
+                  variant="secondary"
+                >
+                  Add to My Items
+                </Button>
+                <Button onClick={handleRetake} type="button">
+                  Scan another item
+                </Button>
+              </>
+            }
           />
-          <Button asChild type="button">
-            <Link href="/items">Add to My Items</Link>
-          </Button>
         </>
       ) : uploadedUrl && !isManualFallback ? (
         <div className="rounded-md border bg-muted/30 p-3">
