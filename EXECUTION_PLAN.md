@@ -885,11 +885,11 @@ None required.
 **What:** Build the main items list page.
 
 **Acceptance Criteria:**
-- [ ] Shows filter tabs at top
-- [ ] Renders item list below filters
-- [ ] Filters update list content
-- [ ] Protected route (requires auth)
-- [ ] Links from bottom nav work
+- [x] Shows filter tabs at top
+- [x] Renders item list below filters
+- [x] Filters update list content
+- [x] Protected route (requires auth)
+- [x] Links from bottom nav work
 
 **Files:**
 - Create: `app/items/page.tsx` — items list page
