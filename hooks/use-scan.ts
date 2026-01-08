@@ -11,6 +11,10 @@ export type ScanRequest = {
   condition: ItemCondition;
 };
 
+export type ManualScanRequest = ScanRequest & {
+  manualName: string;
+};
+
 export type ScanResponse = {
   item: {
     id: string;
@@ -47,3 +51,18 @@ export function useScanItem() {
   });
 }
 
+export function useManualScanItem() {
+  const queryClient = useQueryClient();
+
+  return useMutation<ScanResponse, ApiError, ManualScanRequest>({
+    mutationFn: async (payload) => {
+      return await fetchJson<ScanResponse>("/api/scan/manual", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.items });
+    },
+  });
+}

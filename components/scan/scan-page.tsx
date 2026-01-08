@@ -5,10 +5,11 @@ import Link from "next/link";
 
 import { CameraCapture } from "@/components/scan/camera-capture";
 import { ConditionSelector } from "@/components/scan/condition-selector";
+import { ManualInput } from "@/components/scan/manual-input";
 import { RecommendationCard } from "@/components/scan/recommendation-card";
 import { Button } from "@/components/ui/button";
 import { ApiError } from "@/lib/api-client";
-import { useScanItem } from "@/hooks/use-scan";
+import { useManualScanItem, useScanItem } from "@/hooks/use-scan";
 import type { ItemCondition } from "@/lib/scan-types";
 import { uploadImage } from "@/lib/upload";
 
@@ -17,8 +18,10 @@ export function ScanPageClient() {
   const [condition, setCondition] = useState<ItemCondition | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const [isManualFallback, setIsManualFallback] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scanMutation = useScanItem();
+  const manualScanMutation = useManualScanItem();
 
   async function handleSubmit() {
     if (!file || !condition) return;
@@ -26,7 +29,9 @@ export function ScanPageClient() {
     setIsUploading(true);
     setError(null);
     setUploadedUrl(null);
+    setIsManualFallback(false);
     scanMutation.reset();
+    manualScanMutation.reset();
 
     try {
       const url = await uploadImage(file);
@@ -34,7 +39,7 @@ export function ScanPageClient() {
       await scanMutation.mutateAsync({ imageUrl: url, condition });
     } catch (e) {
       if (e instanceof ApiError && e.code === "LOW_CONFIDENCE") {
-        setError("Couldn't identify this item. Try retaking the photo.");
+        setIsManualFallback(true);
         return;
       }
       const message =
@@ -49,8 +54,36 @@ export function ScanPageClient() {
     }
   }
 
-  const isBusy = isUploading || scanMutation.isPending;
-  const result = scanMutation.data?.item ?? null;
+  async function handleManualSubmit(manualName: string) {
+    if (!uploadedUrl || !condition) return;
+    setError(null);
+
+    try {
+      await manualScanMutation.mutateAsync({ imageUrl: uploadedUrl, condition, manualName });
+      setIsManualFallback(false);
+    } catch (e) {
+      const message =
+        e instanceof ApiError && typeof e.details === "string"
+          ? e.details
+          : e instanceof Error
+            ? e.message
+            : "Something went wrong";
+      setError(message);
+    }
+  }
+
+  function handleRetake() {
+    setFile(null);
+    setCondition(null);
+    setUploadedUrl(null);
+    setIsManualFallback(false);
+    setError(null);
+    scanMutation.reset();
+    manualScanMutation.reset();
+  }
+
+  const isBusy = isUploading || scanMutation.isPending || manualScanMutation.isPending;
+  const result = scanMutation.data?.item ?? manualScanMutation.data?.item ?? null;
 
   return (
     <section className="flex flex-col gap-4">
@@ -59,8 +92,10 @@ export function ScanPageClient() {
         onFileChange={(next) => {
           setFile(next);
           setUploadedUrl(null);
+          setIsManualFallback(false);
           setError(null);
           scanMutation.reset();
+          manualScanMutation.reset();
           if (!next) setCondition(null);
         }}
       />
@@ -68,13 +103,21 @@ export function ScanPageClient() {
       {file ? (
         <>
           <ConditionSelector onChange={setCondition} value={condition} />
-          <Button
-            disabled={!file || !condition || isBusy}
-            onClick={handleSubmit}
-            type="button"
-          >
-            {isUploading ? "Uploading…" : scanMutation.isPending ? "Analyzing…" : "Continue"}
-          </Button>
+          {isManualFallback ? (
+            <ManualInput
+              isSubmitting={manualScanMutation.isPending}
+              onCancel={handleRetake}
+              onSubmit={handleManualSubmit}
+            />
+          ) : (
+            <Button
+              disabled={!file || !condition || isBusy}
+              onClick={handleSubmit}
+              type="button"
+            >
+              {isUploading ? "Uploading…" : scanMutation.isPending ? "Analyzing…" : "Continue"}
+            </Button>
+          )}
         </>
       ) : null}
 
@@ -98,7 +141,7 @@ export function ScanPageClient() {
             <Link href="/items">Add to My Items</Link>
           </Button>
         </>
-      ) : uploadedUrl ? (
+      ) : uploadedUrl && !isManualFallback ? (
         <div className="rounded-md border bg-muted/30 p-3">
           <div className="text-sm font-medium">Uploaded image URL (temporary)</div>
           <div className="mt-1 break-all font-mono text-xs text-foreground/80">

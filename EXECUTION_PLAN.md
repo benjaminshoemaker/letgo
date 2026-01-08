@@ -688,11 +688,11 @@ None required.
 **What:** Connect manual input to scan page when AI confidence is low.
 
 **Acceptance Criteria:**
-- [ ] LOW_CONFIDENCE error triggers manual input display
-- [ ] Manual submission calls /api/scan/manual
-- [ ] Success shows recommendation card as normal
-- [ ] User can cancel and retake photo instead
-- [ ] Smooth transition between states
+- [x] LOW_CONFIDENCE error triggers manual input display
+- [x] Manual submission calls /api/scan/manual
+- [x] Success shows recommendation card as normal
+- [x] User can cancel and retake photo instead
+- [x] Smooth transition between states
 
 **Files:**
 - Modify: `app/scan/page.tsx` — add fallback flow
