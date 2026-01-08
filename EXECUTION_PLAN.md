@@ -711,11 +711,11 @@ None required.
 - [x] `npm run lint` passes
 
 **Manual Verification:**
-- [ ] Scan an ambiguous/unusual item
-- [ ] If LOW_CONFIDENCE, manual input appears
-- [ ] Enter item name manually
-- [ ] Recommendation generates successfully
-- [ ] Item saved with userOverrideName
+- [x] Scan an ambiguous/unusual item
+- [x] If LOW_CONFIDENCE, manual input appears
+- [x] Enter item name manually
+- [x] Recommendation generates successfully
+- [x] Item saved with userOverrideName
 
 ---
 
