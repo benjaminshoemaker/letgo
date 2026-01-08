@@ -37,7 +37,12 @@ export function ScanPageClient() {
         setError("Couldn't identify this item. Try retaking the photo.");
         return;
       }
-      const message = e instanceof Error ? e.message : "Something went wrong";
+      const message =
+        e instanceof ApiError && typeof e.details === "string"
+          ? e.details
+          : e instanceof Error
+            ? e.message
+            : "Something went wrong";
       setError(message);
     } finally {
       setIsUploading(false);

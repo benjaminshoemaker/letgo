@@ -26,16 +26,28 @@ export async function scanItem(
       },
     ],
     reasoning: { effort: "low" },
+    text: { format: { type: "json_object" } },
     max_output_tokens: 1000,
     temperature: 0.3,
   });
+
+  if (response.status !== "completed") {
+    throw new Error(
+      `AI response not completed (status=${response.status}, reason=${response.incomplete_details?.reason ?? "unknown"})`
+    );
+  }
 
   const content = response.output_text?.trim();
   if (!content) {
     throw new Error("No response from AI");
   }
 
-  const result = JSON.parse(content) as ScanResult;
+  let result: ScanResult;
+  try {
+    result = JSON.parse(content) as ScanResult;
+  } catch {
+    throw new Error("AI response was not valid JSON");
+  }
 
   if (result.confidence === "LOW" && !manualName) {
     const error = new Error("Low confidence identification") as LowConfidenceError;

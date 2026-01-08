@@ -65,6 +65,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ item, rateLimitRemaining });
   } catch (error: unknown) {
+    console.error("Scan error", error);
     if (
       typeof error === "object" &&
       error !== null &&
@@ -77,7 +78,13 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json({ error: "Scan failed" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Scan failed";
+    return NextResponse.json(
+      {
+        error: "Scan failed",
+        ...(process.env.NODE_ENV !== "production" ? { details: message } : null),
+      },
+      { status: 500 }
+    );
   }
 }
-

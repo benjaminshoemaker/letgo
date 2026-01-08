@@ -34,14 +34,14 @@ export async function fetchJson<T>(
 
   if (!res.ok) {
     const payload = data as ApiErrorPayload | null;
-    throw new ApiError(
-      payload?.error ?? res.statusText,
-      res.status,
-      payload?.code,
-      payload?.details
-    );
+    const details = payload?.details;
+    const message =
+      typeof details === "string" && details.trim().length > 0
+        ? details
+        : payload?.error ?? res.statusText;
+
+    throw new ApiError(message, res.status, payload?.code, details);
   }
 
   return data as T;
 }
-
