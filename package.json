@@ -8,9 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "prisma": "prisma",
-    "db:push": "prisma db push",
-    "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio",
+    "db:push": "bash -lc 'set -a; [ -f .env.local ] && source .env.local; set +a; prisma db push \"$@\"' --",
+    "db:migrate": "bash -lc 'set -a; [ -f .env.local ] && source .env.local; set +a; prisma migrate dev \"$@\"' --",
+    "db:studio": "bash -lc 'set -a; [ -f .env.local ] && source .env.local; set +a; prisma studio \"$@\"' --",
     "postinstall": "prisma generate"
   },
   "dependencies": {
