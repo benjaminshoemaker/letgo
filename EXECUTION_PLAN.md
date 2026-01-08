@@ -865,11 +865,11 @@ None required.
 **What:** Build dropdown for changing item status.
 
 **Acceptance Criteria:**
-- [ ] Shows current status
-- [ ] Dropdown with options: Sold, Donated, Recycled, Trashed
-- [ ] Updates status via mutation on selection
-- [ ] Shows loading state during update
-- [ ] Closes dropdown on selection
+- [x] Shows current status
+- [x] Dropdown with options: Sold, Donated, Recycled, Trashed
+- [x] Updates status via mutation on selection
+- [x] Shows loading state during update
+- [x] Closes dropdown on selection
 
 **Files:**
 - Create: `components/items/status-dropdown.tsx` — status dropdown
