@@ -1040,9 +1040,9 @@ Human must complete before agents begin:
 **What:** Build endpoint to get user's rate limit status.
 
 **Acceptance Criteria:**
-- [ ] GET /api/user/stats requires authentication
-- [ ] Returns scansToday, scanLimit, scansRemaining, resetsAt
-- [ ] Handles count reset if new day
+- [x] GET /api/user/stats requires authentication
+- [x] Returns scansToday, scanLimit, scansRemaining, resetsAt
+- [x] Handles count reset if new day
 
 **Files:**
 - Create: `app/api/user/stats/route.ts` — user stats endpoint
