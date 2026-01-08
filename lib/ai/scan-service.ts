@@ -10,16 +10,18 @@ function shouldTriggerManualFallback(result: ScanResult): boolean {
 
   if (result.confidence !== "MEDIUM") return false;
 
-  const hedge = /(not sure|unclear|hard to tell|difficult to tell|can'?t tell|maybe|possibly|might|appears to be|looks like)/i;
-  if (hedge.test(result.reasoning)) return true;
-
   const name = result.identifiedName.trim().toLowerCase();
-  const genericName =
-    name.length < 4 ||
-    /(unknown|misc|miscellaneous|item|object|thing|stuff)/i.test(name) ||
-    /^(a |an |the )?(unknown|unclear)/i.test(name);
+  const nameVeryShort = name.length < 4;
+  const nameStartsUnknown =
+    /^(a |an |the )?(unknown|unclear|unidentified|misc(?:ellaneous)?)(\b|$)/i.test(name);
 
-  return genericName;
+  if (nameVeryShort || nameStartsUnknown) return true;
+
+  // Only trigger on stronger uncertainty, otherwise MEDIUM should proceed normally.
+  const strongUncertainty =
+    /(not sure|unclear|hard to tell|difficult to tell|can'?t tell|can't tell|unable to identify|can'?t identify)/i;
+
+  return strongUncertainty.test(result.reasoning);
 }
 
 export async function scanItem(

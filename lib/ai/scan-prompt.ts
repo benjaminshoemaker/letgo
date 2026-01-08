@@ -14,6 +14,10 @@ Respond with a JSON object containing:
 8. "isHazardous": Boolean indicating if special disposal is needed
 9. "hazardWarning": If hazardous, specific warning and disposal instructions
 
+For "identifiedName":
+- Keep it concise and searchable (no hedging language like "maybe" and no parenthetical uncertainty).
+- Put any uncertainty in "reasoning" and reflect it in "confidence".
+
 CONFIDENCE RUBRIC (be strict; do NOT guess):
 - HIGH: You can clearly see a single item and you are confident in the specific item type (and brand/model if visible).
 - MEDIUM: You can identify the general item type/category, but key details are unclear (brand/model/variant not visible) OR there is slight ambiguity.
