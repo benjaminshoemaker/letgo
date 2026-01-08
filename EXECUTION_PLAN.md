@@ -756,11 +756,11 @@ None required.
 **What:** Build GET/PATCH/DELETE /api/items/[id] endpoints.
 
 **Acceptance Criteria:**
-- [ ] GET returns single item if owned by user
-- [ ] PATCH updates status or userOverrideName
-- [ ] DELETE removes item and returns 204
-- [ ] All routes return 404 if item not found or not owned
-- [ ] PATCH validates status enum values
+- [x] GET returns single item if owned by user
+- [x] PATCH updates status or userOverrideName
+- [x] DELETE removes item and returns 204
+- [x] All routes return 404 if item not found or not owned
+- [x] PATCH validates status enum values
 
 **Files:**
 - Create: `app/api/items/[id]/route.ts` — item detail endpoints
