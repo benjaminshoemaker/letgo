@@ -666,11 +666,11 @@ None required.
 **What:** Build POST /api/scan/manual endpoint for fallback flow.
 
 **Acceptance Criteria:**
-- [ ] Requires authentication
-- [ ] Validates imageUrl, condition, and manualName
-- [ ] Calls AI scan service with manualName parameter
-- [ ] Creates Item record with userOverrideName set
-- [ ] Returns item data same as /api/scan
+- [x] Requires authentication
+- [x] Validates imageUrl, condition, and manualName
+- [x] Calls AI scan service with manualName parameter
+- [x] Creates Item record with userOverrideName set
+- [x] Returns item data same as /api/scan
 
 **Files:**
 - Create: `app/api/scan/manual/route.ts` — manual scan endpoint
