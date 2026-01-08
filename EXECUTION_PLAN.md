@@ -1080,11 +1080,11 @@ Human must complete before agents begin:
 **What:** Show remaining scans and limit reached message.
 
 **Acceptance Criteria:**
-- [ ] Header or scan page shows remaining scans
-- [ ] Rate limit reached shows clear message
-- [ ] Message includes reset time
-- [ ] Scan button disabled when limit reached
-- [ ] UI updates after each scan
+- [x] Header or scan page shows remaining scans
+- [x] Rate limit reached shows clear message
+- [x] Message includes reset time
+- [x] Scan button disabled when limit reached
+- [x] UI updates after each scan
 
 **Files:**
 - Modify: `app/scan/page.tsx` — add rate limit display

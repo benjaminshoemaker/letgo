@@ -7,9 +7,11 @@ import { CameraCapture } from "@/components/scan/camera-capture";
 import { ConditionSelector } from "@/components/scan/condition-selector";
 import { ManualInput } from "@/components/scan/manual-input";
 import { RecommendationCard } from "@/components/scan/recommendation-card";
+import { RateLimitBanner } from "@/components/shared/rate-limit-banner";
 import { Button } from "@/components/ui/button";
 import { ApiError } from "@/lib/api-client";
 import { useManualScanItem, useScanItem } from "@/hooks/use-scan";
+import { useUserStats } from "@/hooks/use-user-stats";
 import type { ItemCondition } from "@/lib/scan-types";
 import { uploadImage } from "@/lib/upload";
 
@@ -23,6 +25,7 @@ export function ScanPageClient() {
   const [error, setError] = useState<string | null>(null);
   const scanMutation = useScanItem();
   const manualScanMutation = useManualScanItem();
+  const statsQuery = useUserStats();
 
   async function handleSubmit() {
     if (!file || !condition) return;
@@ -41,6 +44,10 @@ export function ScanPageClient() {
     } catch (e) {
       if (e instanceof ApiError && e.code === "LOW_CONFIDENCE") {
         setIsManualFallback(true);
+        return;
+      }
+      if (e instanceof ApiError && e.code === "RATE_LIMITED") {
+        setError(e.message);
         return;
       }
       const message =
@@ -63,6 +70,10 @@ export function ScanPageClient() {
       await manualScanMutation.mutateAsync({ imageUrl: uploadedUrl, condition, manualName });
       setIsManualFallback(false);
     } catch (e) {
+      if (e instanceof ApiError && e.code === "RATE_LIMITED") {
+        setError(e.message);
+        return;
+      }
       const message =
         e instanceof ApiError && typeof e.details === "string"
           ? e.details
@@ -85,10 +96,21 @@ export function ScanPageClient() {
 
   const isBusy = isUploading || scanMutation.isPending || manualScanMutation.isPending;
   const result = scanMutation.data?.item ?? manualScanMutation.data?.item ?? null;
+  const scansRemaining = statsQuery.data?.scansRemaining ?? null;
+  const limitReached = scansRemaining !== null && scansRemaining <= 0;
 
   return (
     <section className="flex flex-col gap-4">
+      {statsQuery.data ? (
+        <RateLimitBanner
+          scanLimit={statsQuery.data.scanLimit}
+          scansRemaining={statsQuery.data.scansRemaining}
+          resetsAt={statsQuery.data.resetsAt}
+        />
+      ) : null}
+
       <CameraCapture
+        disabled={limitReached}
         file={file}
         onFileChange={(next) => {
           setFile(next);
@@ -106,13 +128,13 @@ export function ScanPageClient() {
           <ConditionSelector onChange={setCondition} value={condition} />
           {isManualFallback ? (
             <ManualInput
-              isSubmitting={manualScanMutation.isPending}
+              isSubmitting={manualScanMutation.isPending || limitReached}
               onCancel={handleRetake}
               onSubmit={handleManualSubmit}
             />
           ) : (
             <Button
-              disabled={!file || !condition || isBusy}
+              disabled={!file || !condition || isBusy || limitReached}
               onClick={handleSubmit}
               type="button"
             >

@@ -16,9 +16,11 @@ function isAcceptedImageType(file: File): file is File & { type: AcceptedMimeTyp
 export function CameraCapture({
   file,
   onFileChange,
+  disabled,
 }: {
   file: File | null;
   onFileChange: (file: File | null) => void;
+  disabled?: boolean;
 }) {
   const cameraInputRef = useRef<HTMLInputElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -55,6 +57,7 @@ export function CameraCapture({
           <div className="flex flex-col gap-2">
             <Button
               className="h-12 text-base"
+              disabled={disabled}
               onClick={() => cameraInputRef.current?.click()}
               type="button"
             >
@@ -62,6 +65,7 @@ export function CameraCapture({
             </Button>
             <Button
               className="h-12 text-base"
+              disabled={disabled}
               onClick={() => fileInputRef.current?.click()}
               type="button"
               variant="secondary"
@@ -74,6 +78,7 @@ export function CameraCapture({
             accept={ACCEPTED_MIME_TYPES.join(",")}
             capture="environment"
             className="hidden"
+            disabled={disabled}
             onChange={(e) => handleFiles(e.target.files)}
             ref={cameraInputRef}
             type="file"
@@ -81,6 +86,7 @@ export function CameraCapture({
           <input
             accept={ACCEPTED_MIME_TYPES.join(",")}
             className="hidden"
+            disabled={disabled}
             onChange={(e) => handleFiles(e.target.files)}
             ref={fileInputRef}
             type="file"
