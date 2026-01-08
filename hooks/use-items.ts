@@ -40,21 +40,20 @@ export function useItems({
   status?: ItemsStatusFilter;
   limit?: number;
 }) {
-  return useInfiniteQuery<ItemsPage, ApiError, ItemsPage, ReturnType<typeof queryKeys.items.list>, string | null>(
-    {
-      queryKey: queryKeys.items.list(status),
-      queryFn: async ({ pageParam }) => {
-        const params = new URLSearchParams();
-        if (status && status !== "all") params.set("status", status);
-        params.set("limit", String(limit));
-        if (pageParam) params.set("cursor", pageParam);
+  return useInfiniteQuery<ItemsPage, ApiError>({
+    queryKey: queryKeys.items.list(status),
+    queryFn: async ({ pageParam }) => {
+      const params = new URLSearchParams();
+      if (status && status !== "all") params.set("status", status);
+      params.set("limit", String(limit));
+      const cursor = typeof pageParam === "string" ? pageParam : null;
+      if (cursor) params.set("cursor", cursor);
 
-        return await fetchJson<ItemsPage>(`/api/items?${params.toString()}`);
-      },
-      initialPageParam: null,
-      getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : null),
-    }
-  );
+      return await fetchJson<ItemsPage>(`/api/items?${params.toString()}`);
+    },
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : null),
+  });
 }
 
 export function useItem(id: string) {
@@ -100,4 +99,3 @@ export function useDeleteItem() {
     },
   });
 }
-

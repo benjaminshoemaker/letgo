@@ -843,11 +843,11 @@ None required.
 **What:** Build scrollable list of item cards.
 
 **Acceptance Criteria:**
-- [ ] Renders list of ItemCard components
-- [ ] Shows loading skeleton while fetching
-- [ ] Shows empty state when no items
+- [x] Renders list of ItemCard components
+- [x] Shows loading skeleton while fetching
+- [x] Shows empty state when no items
 - [ ] Supports pull-to-refresh (optional)
-- [ ] Handles pagination on scroll (optional for MVP)
+- [x] Handles pagination on scroll (optional for MVP)
 
 **Files:**
 - Create: `components/items/item-list.tsx` — item list component
