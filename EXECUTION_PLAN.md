@@ -801,12 +801,12 @@ None required.
 **What:** Build compact card for displaying item in list.
 
 **Acceptance Criteria:**
-- [ ] Shows thumbnail image
-- [ ] Displays identified name
-- [ ] Shows recommendation badge
-- [ ] Shows current status
-- [ ] Tappable to view details
-- [ ] Appropriate sizing for mobile list
+- [x] Shows thumbnail image
+- [x] Displays identified name
+- [x] Shows recommendation badge
+- [x] Shows current status
+- [x] Tappable to view details
+- [x] Appropriate sizing for mobile list
 
 **Files:**
 - Create: `components/items/item-card.tsx` — item card component
