@@ -14,6 +14,11 @@ Respond with a JSON object containing:
 8. "isHazardous": Boolean indicating if special disposal is needed
 9. "hazardWarning": If hazardous, specific warning and disposal instructions
 
+CONFIDENCE RUBRIC (be strict; do NOT guess):
+- HIGH: You can clearly see a single item and you are confident in the specific item type (and brand/model if visible).
+- MEDIUM: You can identify the general item type/category, but key details are unclear (brand/model/variant not visible) OR there is slight ambiguity.
+- LOW: The image is blurry/dark/partial, has multiple possible interpretations, or you cannot confidently identify the item type. In LOW, it is better to say LOW than to guess. Use a generic category name for "identifiedName" if possible (e.g. "unknown small appliance", "unknown clothing item") and keep reasoning explicit about uncertainty.
+
 RECOMMENDATION LOGIC:
 - SELL: Item value > $20 AND condition is EXCELLENT or GOOD AND active resale market exists
 - DONATE: Item is functional AND value < $20 OR high effort-to-value ratio AND commonly accepted by donation centers
@@ -60,4 +65,3 @@ export function buildUserPrompt(condition: string, manualName?: string): string 
   }
   return prompt;
 }
-

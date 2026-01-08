@@ -5,6 +5,23 @@ import { SYSTEM_PROMPT, buildUserPrompt } from "@/lib/ai/scan-prompt";
 
 type LowConfidenceError = Error & { code: "LOW_CONFIDENCE"; result?: ScanResult };
 
+function shouldTriggerManualFallback(result: ScanResult): boolean {
+  if (result.confidence === "LOW") return true;
+
+  if (result.confidence !== "MEDIUM") return false;
+
+  const hedge = /(not sure|unclear|hard to tell|difficult to tell|can'?t tell|maybe|possibly|might|appears to be|looks like)/i;
+  if (hedge.test(result.reasoning)) return true;
+
+  const name = result.identifiedName.trim().toLowerCase();
+  const genericName =
+    name.length < 4 ||
+    /(unknown|misc|miscellaneous|item|object|thing|stuff)/i.test(name) ||
+    /^(a |an |the )?(unknown|unclear)/i.test(name);
+
+  return genericName;
+}
+
 export async function scanItem(
   imageUrl: string,
   condition: string,
@@ -48,7 +65,7 @@ export async function scanItem(
     throw new Error("AI response was not valid JSON");
   }
 
-  if (result.confidence === "LOW" && !manualName) {
+  if (shouldTriggerManualFallback(result) && !manualName) {
     const error = new Error("Low confidence identification") as LowConfidenceError;
     error.code = "LOW_CONFIDENCE";
     error.result = result;
