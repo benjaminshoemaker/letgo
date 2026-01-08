@@ -978,11 +978,11 @@ Human must complete before agents begin:
 **What:** Build rate limiting logic for scans.
 
 **Acceptance Criteria:**
-- [ ] `checkRateLimit` returns allowed, remaining, and resetAt
-- [ ] Count resets at midnight (or when scanCountDate is old)
-- [ ] `incrementScanCount` updates user's scan count
-- [ ] Reads limit from DAILY_SCAN_LIMIT env var
-- [ ] Handles edge case of first scan (no existing count)
+- [x] `checkRateLimit` returns allowed, remaining, and resetAt
+- [x] Count resets at midnight (or when scanCountDate is old)
+- [x] `incrementScanCount` updates user's scan count
+- [x] Reads limit from DAILY_SCAN_LIMIT env var
+- [x] Handles edge case of first scan (no existing count)
 
 **Files:**
 - Create: `lib/rate-limit.ts` — rate limit utilities
