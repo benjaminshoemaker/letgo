@@ -4,18 +4,13 @@ import { scanItem } from "@/lib/ai/scan-service";
 import { withRetry } from "@/lib/ai/retry";
 import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit, incrementScanCount } from "@/lib/rate-limit";
 import type { ItemCondition } from "@/lib/scan-types";
 
 export const runtime = "nodejs";
 
 function isItemCondition(value: unknown): value is ItemCondition {
   return value === "EXCELLENT" || value === "GOOD" || value === "FAIR" || value === "POOR";
-}
-
-function getDailyScanLimit(): number {
-  const raw = process.env.DAILY_SCAN_LIMIT ?? "50";
-  const parsed = Number.parseInt(raw, 10);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 50;
 }
 
 export async function POST(request: Request) {
@@ -42,6 +37,18 @@ export async function POST(request: Request) {
   }
 
   try {
+    const limitStatus = await checkRateLimit(userId);
+    if (!limitStatus.allowed) {
+      return NextResponse.json(
+        {
+          error: "Daily scan limit reached",
+          code: "RATE_LIMITED",
+          resetAt: limitStatus.resetAt.toISOString(),
+        },
+        { status: 429 }
+      );
+    }
+
     const result = await withRetry(() => scanItem(imageUrl, condition));
 
     const item = await prisma.item.create({
@@ -61,9 +68,9 @@ export async function POST(request: Request) {
       },
     });
 
-    const rateLimitRemaining = getDailyScanLimit();
+    const updatedLimit = await incrementScanCount(userId);
 
-    return NextResponse.json({ item, rateLimitRemaining });
+    return NextResponse.json({ item, rateLimitRemaining: updatedLimit.scansRemaining });
   } catch (error: unknown) {
     console.error("Scan error", error);
     if (

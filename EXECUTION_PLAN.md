@@ -1019,11 +1019,11 @@ Human must complete before agents begin:
 **What:** Add rate limit checks to scan endpoints.
 
 **Acceptance Criteria:**
-- [ ] Check rate limit before AI call
-- [ ] Return 429 with reset time if exceeded
-- [ ] Increment count after successful scan
-- [ ] Return remaining count in success response
-- [ ] Works for both /api/scan and /api/scan/manual
+- [x] Check rate limit before AI call
+- [x] Return 429 with reset time if exceeded
+- [x] Increment count after successful scan
+- [x] Return remaining count in success response
+- [x] Works for both /api/scan and /api/scan/manual
 
 **Files:**
 - Modify: `app/api/scan/route.ts` — add rate limit check
