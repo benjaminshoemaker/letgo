@@ -28,6 +28,18 @@ jest.mock("next-auth/react", () => ({
   signOut: jest.fn(),
 }));
 
+// Mock react-markdown (ESM-only module that Jest can't transform)
+jest.mock("react-markdown", () => ({
+  __esModule: true,
+  default: ({ children }: { children: string }) => children,
+}));
+
+// Mock remark-gfm (ESM-only plugin)
+jest.mock("remark-gfm", () => ({
+  __esModule: true,
+  default: () => ({}),
+}));
+
 // Suppress console errors during tests (optional, comment out for debugging)
 const originalError = console.error;
 beforeAll(() => {
