@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ItemCard } from "@/components/items/item-card";
 import { EmptyState } from "@/components/shared/empty-state";
-import { LoadingSpinner } from "@/components/shared/loading-spinner";
+import { ItemListSkeleton } from "@/components/shared/skeleton";
 import { useItems, type ItemsStatusFilter } from "@/hooks/use-items";
 
 export function ItemList({ status }: { status: ItemsStatusFilter }) {
@@ -12,14 +12,14 @@ export function ItemList({ status }: { status: ItemsStatusFilter }) {
   const items = query.data?.pages.flatMap((p) => p.items) ?? [];
 
   if (query.isLoading) {
-    return <LoadingSpinner className="py-10" />;
+    return <ItemListSkeleton count={5} />;
   }
 
   if (query.isError) {
     return (
       <EmptyState
         description={query.error.message}
-        title="Couldn’t load your items"
+        title="Couldn't load your items"
         primaryAction={{ label: "Try again", href: "/items" }}
       />
     );
@@ -63,4 +63,3 @@ export function ItemList({ status }: { status: ItemsStatusFilter }) {
     </div>
   );
 }
-

@@ -7,7 +7,7 @@ import { useState } from "react";
 
 import { StatusDropdown } from "@/components/items/status-dropdown";
 import { EmptyState } from "@/components/shared/empty-state";
-import { LoadingSpinner } from "@/components/shared/loading-spinner";
+import { ItemDetailSkeleton } from "@/components/shared/skeleton";
 import { RecommendationCard } from "@/components/scan/recommendation-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,14 +31,14 @@ export function ItemDetailPageClient({ id }: { id: string }) {
   const deleteMutation = useDeleteItem();
 
   if (query.isLoading) {
-    return <LoadingSpinner className="py-10" />;
+    return <ItemDetailSkeleton />;
   }
 
   if (query.isError) {
     return (
       <EmptyState
         description={query.error.message}
-        title="Couldn’t load this item"
+        title="Couldn't load this item"
         primaryAction={{ label: "Back to My Items", href: "/items" }}
       />
     );
@@ -98,7 +98,7 @@ export function ItemDetailPageClient({ id }: { id: string }) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Delete this item?</DialogTitle>
-            <DialogDescription>This can’t be undone.</DialogDescription>
+            <DialogDescription>This can&apos;t be undone.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>

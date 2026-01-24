@@ -8,6 +8,7 @@ import { ConditionSelector } from "@/components/scan/condition-selector";
 import { ManualInput } from "@/components/scan/manual-input";
 import { RecommendationCard } from "@/components/scan/recommendation-card";
 import { RateLimitBanner } from "@/components/shared/rate-limit-banner";
+import { ScanResultSkeleton } from "@/components/shared/skeleton";
 import { Button } from "@/components/ui/button";
 import { ApiError } from "@/lib/api-client";
 import { useManualScanItem, useScanItem } from "@/hooks/use-scan";
@@ -146,7 +147,9 @@ export function ScanPageClient() {
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
-      {result ? (
+      {scanMutation.isPending || manualScanMutation.isPending ? (
+        <ScanResultSkeleton />
+      ) : result ? (
         <>
           <RecommendationCard
             result={{

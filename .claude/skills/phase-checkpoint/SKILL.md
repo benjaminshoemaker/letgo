@@ -499,13 +499,12 @@ Read `.claude/settings.local.json` for auto-advance configuration:
 ```json
 {
   "autoAdvance": {
-    "enabled": true,      // default: true
-    "delaySeconds": 15    // default: 15
+    "enabled": true      // default: true
   }
 }
 ```
 
-If `autoAdvance` is not configured, use defaults (`enabled: true`, `delaySeconds: 15`).
+If `autoAdvance` is not configured, use defaults (`enabled: true`).
 
 ### Auto-Advance Conditions
 
@@ -522,33 +521,18 @@ Auto-advance to `/phase-prep {N+1}` ONLY if ALL of these are true:
 
 ### If Auto-Advance Conditions Met
 
-1. **Show countdown:**
+1. **Show brief notification:**
    ```
    AUTO-ADVANCE
    ============
    All Phase $1 criteria verified (no truly manual items remain).
-
-   Auto-advancing to /phase-prep {N+1} in 15s...
-   (Press Enter to pause)
+   Proceeding to next phase...
    ```
 
-2. **Wait for delay or interrupt:**
-   - Wait `autoAdvance.delaySeconds` (default 15)
-   - If user presses Enter during countdown, cancel auto-advance
-   - Show countdown updates: `14s... 13s... 12s...`
-
-3. **If not interrupted:**
+2. **Execute immediately:**
    - Track this command in auto-advance session log
-   - Execute `/phase-prep {N+1}`
+   - Invoke `/phase-prep {N+1}` using the Skill tool
    - Continue auto-advance chain (phase-prep will continue if it passes)
-
-4. **If interrupted:**
-   ```
-   Auto-advance paused by user.
-
-   Ready for Phase {N+1}. Run manually when ready:
-     /phase-prep {N+1}
-   ```
 
 ### If Auto-Advance Conditions NOT Met
 

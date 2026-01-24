@@ -1,26 +1,4 @@
 {
-  "schema_version": "1.0",
-  "toolkit_location": "/Users/coding/Projects/ai_coding_project_base",
-  "toolkit_commit": "25f4eace0d1c9cf240dbc2a206c03fbae2c7c52b",
-  "toolkit_commit_date": "2026-01-23T14:23:58-08:00",
-  "last_sync": "2026-01-23T22:46:25Z",
-  "files": {
-    "skills/fresh-start/SKILL.md": "sha256:4612171d23faf7923562f23b6196b66af7b3b7788f6d4cfcf3b7127a1d0257f9",
-    "skills/phase-prep/SKILL.md": "sha256:356465e81c72db21d27b075dc328505df523236ca8afc9c2e6c4452b96358cb4",
-    "skills/phase-start/SKILL.md": "sha256:2fb0f516f8a7b2d5cc24be1f11e8ae33da69cf62db90449b58f2c46130753272",
-    "skills/phase-checkpoint/SKILL.md": "sha256:696e251538ed6c7278a22fba3ba30d926fe93ec75e9fcba4859b6b964b2f3ee5",
-    "skills/verify-task/SKILL.md": "sha256:79eb56d8aabf52c1523489cafaa215c6cc4025c92db9be9210394496b96c8c68",
-    "skills/configure-verification/SKILL.md": "sha256:2442cd78e88f052989138e59dd17dc0881de83ec672851b3a8bddff53b11a202",
-    "skills/progress/SKILL.md": "sha256:4910904fa501d3c4c50fbc633b6f36f2b0d5b31f2b6528245c79528726f63338",
-    "skills/populate-state/SKILL.md": "sha256:38bcd6b151b913c2f74ac8fa009a0f07970b83e41ad0f197231b256b109c6a68",
-    "skills/list-todos/SKILL.md": "sha256:2a466de9979fd28950a59c6a68a01bf65cdacc50a6ee5c6a25bbef487683f8dd",
-    "skills/security-scan/SKILL.md": "sha256:9145f4ad74bc31a6efaf8c68dbda8e221866215e6ac568c15569470bc844b470",
-    "skills/criteria-audit/SKILL.md": "sha256:cef478b00f0dd0793b54470dabd434c2d61ec90b8f35271560b79d1411bdbfab",
-    "skills/code-verification/SKILL.md": "sha256:ccc0c0abf320c00f522aa3297892d1512c75f3dd821c6617fc93737d7729a75b",
-    "skills/spec-verification/SKILL.md": "sha256:454c7b70433a9902e4e0d536d8cabfeabc7149da3f6addfa1dadeca5cfaa824d",
-    "skills/browser-verification/SKILL.md": "sha256:cb04467a470b73bd684c7625f43338d4198cb0b06731a5a1bf58ea2d6034b1cf",
-    "skills/tech-debt-check/SKILL.md": "sha256:27d52cfc1a5d075a5d201aab2b97e833dae83a36b8fcbb48d30bf4e181e9c327",
-    "skills/auto-verify/SKILL.md": "sha256:6ba33626531fa391a1e64e0dc7e530fff0e47ff28bd6ba8d33822c8d3be2e13d",
-    "verification-config.json": "sha256:3cad52c43262804472a50ac86adf4f601b52f9c0b3c8d5cacd8d95ab803a7aee"
-  }
+  "toolkit_commit": "6758c1996ad21da793ba195d91a1d2efc898cc93",
+  "last_sync": "2026-01-24T00:27:42Z"
 }

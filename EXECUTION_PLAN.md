@@ -1175,10 +1175,10 @@ Human must complete before agents begin:
 **What:** Add skeleton loaders for content-heavy pages.
 
 **Acceptance Criteria:**
-- [ ] Items list shows skeleton cards while loading
-- [ ] Item detail shows skeleton while loading
-- [ ] Scan result shows skeleton during AI processing
-- [ ] Skeletons match approximate content layout
+- [x] Items list shows skeleton cards while loading
+- [x] Item detail shows skeleton while loading
+- [x] Scan result shows skeleton during AI processing
+- [x] Skeletons match approximate content layout
 
 **Files:**
 - Create: `components/shared/skeleton.tsx` — skeleton component
