@@ -1219,11 +1219,11 @@ Human must complete before agents begin:
 **What:** Add toast system for success/error feedback.
 
 **Acceptance Criteria:**
-- [ ] Toast component or library integrated
-- [ ] Success toast after saving item
-- [ ] Error toast on API failures
-- [ ] Toasts dismissable and auto-fade
-- [ ] Positioned appropriately for mobile
+- [x] Toast component or library integrated
+- [x] Success toast after saving item
+- [x] Error toast on API failures
+- [x] Toasts dismissable and auto-fade
+- [x] Positioned appropriately for mobile
 
 **Files:**
 - Create: `components/shared/toast.tsx` — toast component (or install sonner/react-hot-toast)

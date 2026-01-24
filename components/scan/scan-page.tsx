@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { ApiError } from "@/lib/api-client";
 import { useManualScanItem, useScanItem } from "@/hooks/use-scan";
+import { toast } from "sonner";
 import { useUserStats } from "@/hooks/use-user-stats";
 import type { ItemCondition } from "@/lib/scan-types";
 import { uploadImage } from "@/lib/upload";
@@ -24,7 +25,6 @@ export function ScanPageClient() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
   const [isManualFallback, setIsManualFallback] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const scanMutation = useScanItem();
   const manualScanMutation = useManualScanItem();
   const statsQuery = useUserStats();
@@ -33,7 +33,6 @@ export function ScanPageClient() {
     if (!file || !condition) return;
 
     setIsUploading(true);
-    setError(null);
     setUploadedUrl(null);
     setIsManualFallback(false);
     scanMutation.reset();
@@ -49,7 +48,7 @@ export function ScanPageClient() {
         return;
       }
       if (e instanceof ApiError && e.code === "RATE_LIMITED") {
-        setError(e.message);
+        toast.error(e.message);
         return;
       }
       const message =
@@ -58,7 +57,7 @@ export function ScanPageClient() {
           : e instanceof Error
             ? e.message
             : "Something went wrong";
-      setError(message);
+      toast.error(message);
     } finally {
       setIsUploading(false);
     }
@@ -66,14 +65,13 @@ export function ScanPageClient() {
 
   async function handleManualSubmit(manualName: string) {
     if (!uploadedUrl || !condition) return;
-    setError(null);
 
     try {
       await manualScanMutation.mutateAsync({ imageUrl: uploadedUrl, condition, manualName });
       setIsManualFallback(false);
     } catch (e) {
       if (e instanceof ApiError && e.code === "RATE_LIMITED") {
-        setError(e.message);
+        toast.error(e.message);
         return;
       }
       const message =
@@ -82,7 +80,7 @@ export function ScanPageClient() {
           : e instanceof Error
             ? e.message
             : "Something went wrong";
-      setError(message);
+      toast.error(message);
     }
   }
 
@@ -91,7 +89,6 @@ export function ScanPageClient() {
     setCondition(null);
     setUploadedUrl(null);
     setIsManualFallback(false);
-    setError(null);
     scanMutation.reset();
     manualScanMutation.reset();
   }
@@ -118,7 +115,6 @@ export function ScanPageClient() {
           setFile(next);
           setUploadedUrl(null);
           setIsManualFallback(false);
-          setError(null);
           scanMutation.reset();
           manualScanMutation.reset();
           if (!next) setCondition(null);
@@ -152,8 +148,6 @@ export function ScanPageClient() {
           )}
         </>
       ) : null}
-
-      {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
       {scanMutation.isPending || manualScanMutation.isPending ? (
         <ScanResultSkeleton />
