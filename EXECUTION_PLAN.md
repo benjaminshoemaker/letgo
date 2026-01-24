@@ -1283,10 +1283,10 @@ Human must complete before agents begin:
 **What:** Add SEO and social meta tags.
 
 **Acceptance Criteria:**
-- [ ] Open Graph title, description, image
-- [ ] iOS web app meta tags
-- [ ] Theme color meta tag
-- [ ] Favicon configured
+- [x] Open Graph title, description, image
+- [x] iOS web app meta tags
+- [x] Theme color meta tag
+- [x] Favicon configured
 
 **Files:**
 - Modify: `app/layout.tsx` — add meta tags

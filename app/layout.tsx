@@ -30,6 +30,18 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     apple: "/icons/apple-touch-icon.png",
   },
+  openGraph: {
+    title: "LetGo",
+    description: "Snap a photo, get instant decluttering advice - sell, donate, recycle, or dispose",
+    siteName: "LetGo",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "LetGo",
+    description: "Snap a photo, get instant decluttering advice - sell, donate, recycle, or dispose",
+  },
 };
 
 export const viewport: Viewport = {
