@@ -1435,11 +1435,11 @@ None required.
 **What:** Write unit tests for key UI components.
 
 **Acceptance Criteria:**
-- [ ] ConditionSelector renders all options and handles selection
-- [ ] RecommendationCard renders all recommendation types
-- [ ] RecommendationCard shows hazard warning when appropriate
-- [ ] ItemCard renders item data correctly
-- [ ] All tests pass
+- [x] ConditionSelector renders all options and handles selection
+- [x] RecommendationCard renders all recommendation types
+- [x] RecommendationCard shows hazard warning when appropriate
+- [x] ItemCard renders item data correctly
+- [x] All tests pass
 
 **Files:**
 - Create: `tests/unit/components/condition-selector.test.tsx`
@@ -1459,12 +1459,12 @@ None required.
 **What:** Write integration tests for scan endpoints.
 
 **Acceptance Criteria:**
-- [ ] Test successful scan creates item
-- [ ] Test rejects invalid condition
-- [ ] Test requires authentication
-- [ ] Test returns 422 on low confidence
-- [ ] Mock OpenAI appropriately
-- [ ] All tests pass
+- [x] Test successful scan creates item
+- [x] Test rejects invalid condition
+- [x] Test requires authentication
+- [x] Test returns 422 on low confidence
+- [x] Mock OpenAI appropriately
+- [x] All tests pass
 
 **Files:**
 - Create: `tests/integration/api/scan.test.ts` — scan API tests
@@ -1480,12 +1480,12 @@ None required.
 **What:** Write integration tests for items endpoints.
 
 **Acceptance Criteria:**
-- [ ] Test list returns user's items only
-- [ ] Test filtering by status works
-- [ ] Test update status works
-- [ ] Test delete works
-- [ ] Test 404 for non-existent items
-- [ ] All tests pass
+- [x] Test list returns user's items only
+- [x] Test filtering by status works
+- [x] Test update status works
+- [x] Test delete works
+- [x] Test 404 for non-existent items
+- [x] All tests pass
 
 **Files:**
 - Create: `tests/integration/api/items.test.ts` — items API tests
@@ -1501,11 +1501,11 @@ None required.
 **What:** Write integration tests for data hooks.
 
 **Acceptance Criteria:**
-- [ ] Test useItems fetches and caches data
-- [ ] Test useUpdateItemStatus invalidates cache
-- [ ] Test useScanItem handles success and error
-- [ ] Mock fetch appropriately
-- [ ] All tests pass
+- [x] Test useItems fetches and caches data
+- [x] Test useUpdateItemStatus invalidates cache
+- [x] Test useScanItem handles success and error
+- [x] Mock fetch appropriately
+- [x] All tests pass
 
 **Files:**
 - Create: `tests/integration/hooks/use-items.test.tsx` — hooks tests
@@ -1523,11 +1523,11 @@ None required.
 **What:** Write E2E test for authentication flow.
 
 **Acceptance Criteria:**
-- [ ] Test sign-in redirects to Google (or mock)
-- [ ] Test authenticated user sees dashboard
-- [ ] Test unauthenticated user redirected to sign-in
-- [ ] Test sign-out works
-- [ ] Test runs on mobile viewports
+- [x] Test sign-in redirects to Google (or mock)
+- [x] Test authenticated user sees dashboard
+- [x] Test unauthenticated user redirected to sign-in
+- [x] Test sign-out works
+- [x] Test runs on mobile viewports
 
 **Files:**
 - Create: `tests/e2e/auth-flow.spec.ts` — auth E2E test
@@ -1543,11 +1543,11 @@ None required.
 **What:** Write E2E test for complete scan flow.
 
 **Acceptance Criteria:**
-- [ ] Test upload image and select condition
-- [ ] Test submit and see recommendation
-- [ ] Test save to my items
-- [ ] Test handles low confidence fallback
-- [ ] Uses fixture images for consistent testing
+- [x] Test upload image and select condition
+- [x] Test submit and see recommendation
+- [x] Test save to my items
+- [x] Test handles low confidence fallback
+- [x] Uses fixture images for consistent testing
 
 **Files:**
 - Create: `tests/e2e/scan-flow.spec.ts` — scan E2E test
@@ -1564,11 +1564,11 @@ None required.
 **What:** Write E2E test for items list and management.
 
 **Acceptance Criteria:**
-- [ ] Test view items list
-- [ ] Test filter by status
-- [ ] Test change item status
-- [ ] Test delete item
-- [ ] Test runs on mobile viewports
+- [x] Test view items list
+- [x] Test filter by status
+- [x] Test change item status
+- [x] Test delete item
+- [x] Test runs on mobile viewports
 
 **Files:**
 - Create: `tests/e2e/items-management.spec.ts` — items E2E test
@@ -1586,11 +1586,11 @@ None required.
 **What:** Set up CI pipeline for automated testing.
 
 **Acceptance Criteria:**
-- [ ] Workflow runs on pull requests
-- [ ] Runs lint, type check, and tests
-- [ ] Runs E2E tests with Playwright
-- [ ] Blocks merge on failure
-- [ ] Caches dependencies for speed
+- [x] Workflow runs on pull requests
+- [x] Runs lint, type check, and tests
+- [x] Runs E2E tests with Playwright
+- [x] Blocks merge on failure
+- [x] Caches dependencies for speed
 
 **Files:**
 - Create: `.github/workflows/ci.yml` — CI workflow
@@ -1604,15 +1604,15 @@ None required.
 ### Phase 8 Checkpoint
 
 **Automated:**
-- [ ] All unit tests pass
-- [ ] All integration tests pass
-- [ ] All E2E tests pass
-- [ ] CI pipeline green
+- [x] All unit tests pass
+- [x] All integration tests pass
+- [x] All E2E tests pass
+- [x] CI pipeline green
 
 **Manual Verification:**
-- [ ] Review test coverage
-- [ ] Confirm critical paths tested
-- [ ] CI runs on a test PR
+- [x] Review test coverage
+- [x] Confirm critical paths tested
+- [x] CI runs on a test PR
 
 ---
 

@@ -99,14 +99,17 @@ describe("POST /api/scan", () => {
 
     mockCheckRateLimit.mockResolvedValue({
       allowed: true,
+      scanLimit: 50,
+      scansToday: 1,
       scansRemaining: 49,
-      limit: 50,
       resetAt: new Date(),
     });
 
     mockIncrementScanCount.mockResolvedValue({
+      allowed: true,
+      scanLimit: 50,
+      scansToday: 2,
       scansRemaining: 48,
-      limit: 50,
       resetAt: new Date(),
     });
 
@@ -214,8 +217,9 @@ describe("POST /api/scan", () => {
   it("enforces rate limiting", async () => {
     mockCheckRateLimit.mockResolvedValue({
       allowed: false,
+      scanLimit: 50,
+      scansToday: 50,
       scansRemaining: 0,
-      limit: 50,
       resetAt: new Date("2025-01-25T00:00:00Z"),
     });
 
@@ -245,13 +249,16 @@ describe("POST /api/scan", () => {
       });
       mockCheckRateLimit.mockResolvedValue({
         allowed: true,
+        scanLimit: 50,
+        scansToday: 1,
         scansRemaining: 49,
-        limit: 50,
         resetAt: new Date(),
       });
       mockIncrementScanCount.mockResolvedValue({
+        allowed: true,
+        scanLimit: 50,
+        scansToday: 2,
         scansRemaining: 48,
-        limit: 50,
         resetAt: new Date(),
       });
       mockScanItem.mockResolvedValue({
