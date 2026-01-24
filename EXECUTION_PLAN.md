@@ -1131,11 +1131,11 @@ Human must complete before agents begin:
 **What:** Set up next-pwa with manifest and service worker.
 
 **Acceptance Criteria:**
-- [ ] Web manifest with app name, icons, theme color
-- [ ] Service worker registered in production
-- [ ] App installable on mobile devices
-- [ ] Correct start_url and display mode
-- [ ] PWA disabled in development
+- [x] Web manifest with app name, icons, theme color
+- [x] Service worker registered in production
+- [x] App installable on mobile devices
+- [x] Correct start_url and display mode
+- [x] PWA disabled in development
 
 **Files:**
 - Create: `public/manifest.json` — web app manifest
