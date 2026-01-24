@@ -1376,11 +1376,11 @@ None required.
 **What:** Write unit tests for rate limiting logic.
 
 **Acceptance Criteria:**
-- [ ] Test allows scan when under limit
-- [ ] Test blocks scan when at limit
-- [ ] Test resets count on new day
-- [ ] Test handles first scan (no existing count)
-- [ ] All tests pass
+- [x] Test allows scan when under limit
+- [x] Test blocks scan when at limit
+- [x] Test resets count on new day
+- [x] Test handles first scan (no existing count)
+- [x] All tests pass
 
 **Files:**
 - Create: `tests/unit/lib/rate-limit.test.ts` — rate limit tests
