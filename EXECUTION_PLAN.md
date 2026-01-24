@@ -1396,11 +1396,11 @@ None required.
 **What:** Write unit tests for image compression utility.
 
 **Acceptance Criteria:**
-- [ ] Test compresses large images
-- [ ] Test respects max dimension setting
-- [ ] Test handles different input formats
-- [ ] Mock browser-image-compression appropriately
-- [ ] All tests pass
+- [x] Test compresses large images
+- [x] Test respects max dimension setting
+- [x] Test handles different input formats
+- [x] Mock browser-image-compression appropriately
+- [x] All tests pass
 
 **Files:**
 - Create: `tests/unit/lib/image-compression.test.ts` — compression tests
