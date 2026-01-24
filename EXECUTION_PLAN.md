@@ -1262,11 +1262,11 @@ Human must complete before agents begin:
 **What:** Final mobile optimizations and fixes.
 
 **Acceptance Criteria:**
-- [ ] Touch targets at least 44x44px
-- [ ] No horizontal scroll on any page
-- [ ] Camera input works on iOS Safari
-- [ ] Camera input works on Android Chrome
-- [ ] Viewport meta tag configured correctly
+- [x] Touch targets at least 44x44px
+- [x] No horizontal scroll on any page
+- [x] Camera input works on iOS Safari
+- [x] Camera input works on Android Chrome
+- [x] Viewport meta tag configured correctly
 
 **Files:**
 - Modify: `app/layout.tsx` — ensure viewport meta tag
