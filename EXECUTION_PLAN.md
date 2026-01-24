@@ -1240,10 +1240,10 @@ Human must complete before agents begin:
 **What:** Add error boundaries for graceful failure handling.
 
 **Acceptance Criteria:**
-- [ ] Root error boundary catches unhandled errors
-- [ ] Error page shows user-friendly message
-- [ ] Retry button available where appropriate
-- [ ] Errors logged (console for MVP)
+- [x] Root error boundary catches unhandled errors
+- [x] Error page shows user-friendly message
+- [x] Retry button available where appropriate
+- [x] Errors logged (console for MVP)
 
 **Files:**
 - Create: `app/error.tsx` — root error page
