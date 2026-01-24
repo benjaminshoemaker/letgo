@@ -1303,15 +1303,15 @@ Human must complete before agents begin:
 **Automated:**
 - [x] `npm run build` succeeds
 - [x] `npm run lint` passes
-- [ ] Lighthouse PWA audit passes (core checks)
+- [x] Lighthouse PWA audit passes (core checks)
 
 **Manual Verification:**
-- [ ] App installable on iOS
-- [ ] App installable on Android
-- [ ] Offline page shows when disconnected
-- [ ] Loading skeletons appear appropriately
-- [ ] Toasts display on actions
-- [ ] No mobile UI issues
+- [ ] App installable on iOS (skipped - no device)
+- [x] App installable on Android
+- [x] Offline page shows when disconnected
+- [x] Loading skeletons appear appropriately
+- [x] Toasts display on actions
+- [x] No mobile UI issues
 
 ---
 
