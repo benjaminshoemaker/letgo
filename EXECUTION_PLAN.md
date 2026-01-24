@@ -1416,10 +1416,10 @@ None required.
 **What:** Write unit tests for prompt building functions.
 
 **Acceptance Criteria:**
-- [ ] Test buildUserPrompt with condition only
-- [ ] Test buildUserPrompt with condition and manualName
-- [ ] Test system prompt contains required elements
-- [ ] All tests pass
+- [x] Test buildUserPrompt with condition only
+- [x] Test buildUserPrompt with condition and manualName
+- [x] Test system prompt contains required elements
+- [x] All tests pass
 
 **Files:**
 - Create: `tests/unit/lib/ai/scan-prompt.test.ts` — prompt tests
