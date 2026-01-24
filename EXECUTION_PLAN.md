@@ -1154,10 +1154,10 @@ Human must complete before agents begin:
 **What:** Build offline fallback page.
 
 **Acceptance Criteria:**
-- [ ] Shows friendly "you're offline" message
-- [ ] Explains app needs internet for scanning
-- [ ] Styled consistently with app
-- [ ] Service worker serves this when offline
+- [x] Shows friendly "you're offline" message
+- [x] Explains app needs internet for scanning
+- [x] Styled consistently with app
+- [x] Service worker serves this when offline
 
 **Files:**
 - Create: `app/offline/page.tsx` — offline page
