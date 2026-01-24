@@ -10,6 +10,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "prisma": "prisma",
     "db:push": "bash -lc 'set -a; [ -f .env.local ] && source .env.local; set +a; prisma db push \"$@\"' --",
     "db:migrate": "bash -lc 'set -a; [ -f .env.local ] && source .env.local; set +a; prisma migrate dev \"$@\"' --",
@@ -42,6 +44,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",

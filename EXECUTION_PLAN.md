@@ -1354,10 +1354,10 @@ None required.
 **What:** Set up Playwright for E2E testing.
 
 **Acceptance Criteria:**
-- [ ] Playwright configured for mobile Chrome and Safari
-- [ ] Base URL configured for local dev server
-- [ ] Web server command configured
-- [ ] HTML reporter enabled
+- [x] Playwright configured for mobile Chrome and Safari
+- [x] Base URL configured for local dev server
+- [x] Web server command configured
+- [x] HTML reporter enabled
 
 **Files:**
 - Create: `playwright.config.ts` — Playwright configuration
