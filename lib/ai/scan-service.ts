@@ -1,4 +1,4 @@
-import { openai, AI_MODEL } from "@/lib/openai";
+import { getOpenAI, AI_MODEL } from "@/lib/openai";
 import type { ScanResult } from "@/lib/scan-types";
 
 import { SYSTEM_PROMPT, buildUserPrompt } from "@/lib/ai/scan-prompt";
@@ -29,7 +29,7 @@ export async function scanItem(
   condition: string,
   manualName?: string
 ): Promise<ScanResult> {
-  const response = await openai.responses.create({
+  const response = await getOpenAI().responses.create({
     model: AI_MODEL,
     input: [
       {
