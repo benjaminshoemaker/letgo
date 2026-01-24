@@ -1621,22 +1621,22 @@ None required.
 Before declaring MVP complete:
 
 **Security:**
-- [ ] All routes require authentication
-- [ ] No secrets in client code
-- [ ] Input validation on all endpoints
-- [ ] Images scoped to user directories
+- [x] All routes require authentication
+- [x] No secrets in client code
+- [x] Input validation on all endpoints
+- [x] Images scoped to user directories
 
 **Performance:**
-- [ ] Lighthouse mobile score > 80
-- [ ] Images compressed before upload
-- [ ] React Query caching working
+- [ ] Lighthouse mobile score > 80 (MANUAL: run Lighthouse audit)
+- [x] Images compressed before upload
+- [x] React Query caching working
 
 **Documentation:**
-- [ ] README updated with setup instructions
-- [ ] Environment variables documented
-- [ ] API endpoints documented (in spec)
+- [ ] README updated with setup instructions (needs update from boilerplate)
+- [x] Environment variables documented (in AGENTS.md)
+- [x] API endpoints documented (in spec)
 
 **Production:**
-- [ ] All environment variables set in Vercel
-- [ ] Database migrations applied
-- [ ] Smoke test all features manually
+- [x] All environment variables set in Vercel
+- [x] Database migrations applied
+- [ ] Smoke test all features manually (MANUAL: test on production)
