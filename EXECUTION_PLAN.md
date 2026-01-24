@@ -1627,12 +1627,12 @@ Before declaring MVP complete:
 - [x] Images scoped to user directories
 
 **Performance:**
-- [ ] Lighthouse mobile score > 80 (MANUAL: run Lighthouse audit)
+- [x] Lighthouse mobile score > 80
 - [x] Images compressed before upload
 - [x] React Query caching working
 
 **Documentation:**
-- [ ] README updated with setup instructions (needs update from boilerplate)
+- [x] README updated with setup instructions
 - [x] Environment variables documented (in AGENTS.md)
 - [x] API endpoints documented (in spec)
 
