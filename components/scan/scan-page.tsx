@@ -10,6 +10,7 @@ import { RecommendationCard } from "@/components/scan/recommendation-card";
 import { RateLimitBanner } from "@/components/shared/rate-limit-banner";
 import { ScanResultSkeleton } from "@/components/shared/skeleton";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import { ApiError } from "@/lib/api-client";
 import { useManualScanItem, useScanItem } from "@/hooks/use-scan";
 import { useUserStats } from "@/hooks/use-user-stats";
@@ -139,7 +140,14 @@ export function ScanPageClient() {
               onClick={handleSubmit}
               type="button"
             >
-              {isUploading ? "Uploading…" : scanMutation.isPending ? "Analyzing…" : "Continue"}
+              {isBusy ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {isUploading ? "Uploading…" : "Analyzing…"}
+                </>
+              ) : (
+                "Continue"
+              )}
             </Button>
           )}
         </>

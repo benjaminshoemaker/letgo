@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { useDeleteItem, useItem } from "@/hooks/use-items";
 import { ApiError } from "@/lib/api-client";
+import { Loader2 } from "lucide-react";
 
 export function ItemDetailPageClient({ id }: { id: string }) {
   const router = useRouter();
@@ -125,7 +126,14 @@ export function ItemDetailPageClient({ id }: { id: string }) {
               }}
               type="button"
             >
-              {deleteMutation.isPending ? "Deleting…" : "Delete"}
+              {deleteMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting…
+                </>
+              ) : (
+                "Delete"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

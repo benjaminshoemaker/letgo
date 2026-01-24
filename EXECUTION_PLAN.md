@@ -1196,10 +1196,10 @@ Human must complete before agents begin:
 **What:** Ensure all action buttons show loading state.
 
 **Acceptance Criteria:**
-- [ ] Submit scan button shows spinner during upload/AI
-- [ ] Status change shows loading state
-- [ ] Delete button shows loading during deletion
-- [ ] Sign-in button shows loading state
+- [x] Submit scan button shows spinner during upload/AI
+- [x] Status change shows loading state
+- [x] Delete button shows loading during deletion
+- [x] Sign-in button shows loading state
 
 **Files:**
 - Modify: `app/scan/page.tsx` — button loading states

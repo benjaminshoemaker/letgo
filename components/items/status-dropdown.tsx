@@ -1,5 +1,7 @@
 "use client";
 
+import { Loader2 } from "lucide-react";
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useUpdateItemStatus } from "@/hooks/use-items";
 import type { ItemStatus } from "@/lib/scan-types";
@@ -28,7 +30,14 @@ export function StatusDropdown({
       value={status}
     >
       <SelectTrigger className="w-full">
-        <SelectValue placeholder={mutation.isPending ? "Updating…" : "Update status"} />
+        {mutation.isPending ? (
+          <span className="flex items-center gap-2">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Updating...
+          </span>
+        ) : (
+          <SelectValue placeholder="Update status" />
+        )}
       </SelectTrigger>
       <SelectContent>
         {OPTIONS.map((opt) => (
