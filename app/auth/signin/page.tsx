@@ -11,7 +11,7 @@ export default async function SignInPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-md flex-col justify-center px-4 py-10">
+    <main className="mx-auto flex flex-1 max-w-md flex-col justify-center px-4 py-10">
       <Card>
         <CardHeader>
           <CardTitle>Sign in</CardTitle>
