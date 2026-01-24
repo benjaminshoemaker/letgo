@@ -950,12 +950,12 @@ None required.
 - [x] `npm run lint` passes
 
 **Manual Verification:**
-- [ ] Items list shows saved items
-- [ ] Filters work correctly
-- [ ] Status can be changed
-- [ ] Item detail page displays correctly
-- [ ] Items can be deleted
-- [ ] Save from scan adds to list
+- [x] Items list shows saved items
+- [x] Filters work correctly
+- [x] Status can be changed
+- [x] Item detail page displays correctly
+- [x] Items can be deleted
+- [x] Save from scan adds to list
 
 ---
 
@@ -1119,8 +1119,8 @@ Human must complete before agents begin:
 
 Human must complete before agents begin:
 
-- [ ] Create app icons (192px and 512px PNG)
-- [ ] Place icons in `public/icons/` directory
+- [x] Create app icons (192px and 512px PNG)
+- [x] Place icons in `public/icons/` directory
 
 ---
 
