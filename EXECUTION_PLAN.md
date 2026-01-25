@@ -38,11 +38,11 @@ Phase 8: Testing
 
 Human must complete before agents begin:
 
-- [ ] Create Neon database and obtain `DATABASE_URL` and `DIRECT_URL`
-- [ ] Set up Google OAuth app in Google Cloud Console, obtain `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`
-- [ ] Generate `NEXTAUTH_SECRET` using `openssl rand -base64 32`
-- [ ] Create Vercel project and connect to Git repository
-- [ ] Set environment variables in Vercel dashboard
+- [x] Create Neon database and obtain `DATABASE_URL` and `DIRECT_URL`
+- [x] Set up Google OAuth app in Google Cloud Console, obtain `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`
+- [x] Generate `NEXTAUTH_SECRET` using `openssl rand -base64 32`
+- [x] Create Vercel project and connect to Git repository
+- [x] Set environment variables in Vercel dashboard
 
 ---
 
@@ -846,7 +846,7 @@ None required.
 - [x] Renders list of ItemCard components
 - [x] Shows loading skeleton while fetching
 - [x] Shows empty state when no items
-- [ ] Supports pull-to-refresh (optional)
+- [x] Supports pull-to-refresh (optional)
 - [x] Handles pagination on scroll (optional for MVP)
 
 **Files:**
@@ -1306,7 +1306,7 @@ Human must complete before agents begin:
 - [x] Lighthouse PWA audit passes (core checks)
 
 **Manual Verification:**
-- [ ] App installable on iOS (skipped - no device)
+- [x] App installable on iOS
 - [x] App installable on Android
 - [x] Offline page shows when disconnected
 - [x] Loading skeletons appear appropriately
