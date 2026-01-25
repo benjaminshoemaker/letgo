@@ -130,7 +130,7 @@ export function ScanPageClient() {
               onCancel={handleRetake}
               onSubmit={handleManualSubmit}
             />
-          ) : (
+          ) : !result ? (
             <Button
               disabled={!file || !condition || isBusy || limitReached}
               onClick={handleSubmit}
@@ -145,7 +145,7 @@ export function ScanPageClient() {
                 "Continue"
               )}
             </Button>
-          )}
+          ) : null}
         </>
       ) : null}
 
@@ -171,7 +171,7 @@ export function ScanPageClient() {
                   type="button"
                   variant="secondary"
                 >
-                  Add to My Items
+                  View in My Items
                 </Button>
                 <Button onClick={handleRetake} type="button">
                   Scan another item
