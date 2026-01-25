@@ -1639,4 +1639,4 @@ Before declaring MVP complete:
 **Production:**
 - [x] All environment variables set in Vercel
 - [x] Database migrations applied
-- [ ] Smoke test all features manually (MANUAL: test on production)
+- [x] Smoke test all features manually
