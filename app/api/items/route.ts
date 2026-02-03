@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { requireAuth } from "@/lib/auth";
+import { getUserIdOrResponse } from "@/app/api/_auth";
+import { itemSelect } from "@/app/api/items/_helpers";
 import { prisma } from "@/lib/prisma";
 import type { ItemStatus } from "@prisma/client";
 
@@ -34,13 +35,8 @@ function parseStatusFilter(value: string | null):
 }
 
 export async function GET(request: Request) {
-  let userId: string;
-  try {
-    const user = await requireAuth();
-    userId = user.id;
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await getUserIdOrResponse();
+  if (!("userId" in auth)) return auth;
 
   const url = new URL(request.url);
   const status = url.searchParams.get("status");
@@ -53,7 +49,7 @@ export async function GET(request: Request) {
   }
 
   const whereBase = {
-    userId,
+    userId: auth.userId,
     ...(statusFilter.where ?? null),
   } as const;
 
@@ -61,7 +57,7 @@ export async function GET(request: Request) {
     null;
   if (cursor) {
     const cursorItem = await prisma.item.findFirst({
-      where: { id: cursor, userId },
+      where: { id: cursor, userId: auth.userId },
       select: { id: true, createdAt: true },
     });
 
@@ -83,23 +79,7 @@ export async function GET(request: Request) {
       where: cursorClause ? { ...whereBase, ...cursorClause } : whereBase,
       orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       take: limit + 1,
-      select: {
-        id: true,
-        photoUrl: true,
-        identifiedName: true,
-        userOverrideName: true,
-        condition: true,
-        recommendation: true,
-        reasoning: true,
-        estimatedValueLow: true,
-        estimatedValueHigh: true,
-        guidance: true,
-        isHazardous: true,
-        hazardWarning: true,
-        status: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: itemSelect(),
     }),
   ]);
 
@@ -109,4 +89,3 @@ export async function GET(request: Request) {
 
   return NextResponse.json({ items, nextCursor, hasMore, totalCount });
 }
-

@@ -80,52 +80,58 @@ const mockIncrementScanCount = incrementScanCount as jest.MockedFunction<
 >;
 const mockScanItem = scanItem as jest.MockedFunction<typeof scanItem>;
 
+const baseUser = {
+  id: mockUserId,
+  email: "test@example.com",
+  name: "Test User",
+};
+
+const baseRateLimit = {
+  allowed: true,
+  scanLimit: 50,
+  scansToday: 1,
+  scansRemaining: 49,
+  resetAt: new Date(),
+};
+
+const baseIncrementRateLimit = {
+  allowed: true,
+  scanLimit: 50,
+  scansToday: 2,
+  scansRemaining: 48,
+  resetAt: new Date(),
+};
+
+const baseScanResult = {
+  identifiedName: "Vintage Lamp",
+  recommendation: "SELL",
+  reasoning: "This item is in good condition.",
+  estimatedValueLow: 2000,
+  estimatedValueHigh: 5000,
+  guidance: "List on eBay",
+  isHazardous: false,
+  hazardWarning: null,
+  confidence: "HIGH",
+};
+
 function createMockRequest(body: object): Request {
   return {
     json: () => Promise.resolve(body),
   } as Request;
 }
 
+function setupSuccessMocks() {
+  mockRequireAuth.mockResolvedValue(baseUser);
+  mockCheckRateLimit.mockResolvedValue({ ...baseRateLimit });
+  mockIncrementScanCount.mockResolvedValue({ ...baseIncrementRateLimit });
+  mockScanItem.mockResolvedValue({ ...baseScanResult });
+  mockCreate.mockResolvedValue(mockItem);
+}
+
 describe("POST /api/scan", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-
-    // Default mocks for successful scan
-    mockRequireAuth.mockResolvedValue({
-      id: mockUserId,
-      email: "test@example.com",
-      name: "Test User",
-    });
-
-    mockCheckRateLimit.mockResolvedValue({
-      allowed: true,
-      scanLimit: 50,
-      scansToday: 1,
-      scansRemaining: 49,
-      resetAt: new Date(),
-    });
-
-    mockIncrementScanCount.mockResolvedValue({
-      allowed: true,
-      scanLimit: 50,
-      scansToday: 2,
-      scansRemaining: 48,
-      resetAt: new Date(),
-    });
-
-    mockScanItem.mockResolvedValue({
-      identifiedName: "Vintage Lamp",
-      recommendation: "SELL",
-      reasoning: "This item is in good condition.",
-      estimatedValueLow: 2000,
-      estimatedValueHigh: 5000,
-      guidance: "List on eBay",
-      isHazardous: false,
-      hazardWarning: null,
-      confidence: "HIGH",
-    });
-
-    mockCreate.mockResolvedValue(mockItem);
+    setupSuccessMocks();
   });
 
   it("creates item on successful scan", async () => {
@@ -242,25 +248,7 @@ describe("POST /api/scan", () => {
 
     for (const condition of conditions) {
       jest.clearAllMocks();
-      mockRequireAuth.mockResolvedValue({
-        id: mockUserId,
-        email: "test@example.com",
-        name: "Test User",
-      });
-      mockCheckRateLimit.mockResolvedValue({
-        allowed: true,
-        scanLimit: 50,
-        scansToday: 1,
-        scansRemaining: 49,
-        resetAt: new Date(),
-      });
-      mockIncrementScanCount.mockResolvedValue({
-        allowed: true,
-        scanLimit: 50,
-        scansToday: 2,
-        scansRemaining: 48,
-        resetAt: new Date(),
-      });
+      setupSuccessMocks();
       mockScanItem.mockResolvedValue({
         identifiedName: "Test Item",
         recommendation: "SELL",
