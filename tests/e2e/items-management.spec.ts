@@ -1,5 +1,15 @@
 import { test, expect } from "@playwright/test";
 
+import {
+  expectOnPathOrSignIn,
+  gotoPage,
+  mockAuthSession,
+  mockItemEndpoint,
+  mockItemsList,
+  mockUserStats,
+  skipIfSignedOut,
+} from "@/tests/e2e/helpers";
+
 const mockItems = [
   {
     id: "item-1",
@@ -56,92 +66,27 @@ const mockItems = [
 
 test.describe("Items Management", () => {
   test.beforeEach(async ({ context }) => {
-    // Mock authenticated session
-    await context.route("**/api/auth/session", async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          user: {
-            id: "test-user-id",
-            email: "test@example.com",
-            name: "Test User",
-            image: null,
-          },
-          expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        }),
-      });
-    });
-
-    // Mock user stats
-    await context.route("**/api/user/stats", async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          scansToday: 5,
-          limit: 50,
-          scansRemaining: 45,
-          resetAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        }),
-      });
-    });
-
-    // Mock items list API
-    await context.route("**/api/items?*", async (route) => {
-      const url = new URL(route.request().url());
-      const status = url.searchParams.get("status");
-
-      let filteredItems = [...mockItems];
-      if (status === "TODO") {
-        filteredItems = mockItems.filter((i) => i.status === "TODO");
-      } else if (status === "DONE") {
-        filteredItems = mockItems.filter((i) =>
-          ["SOLD", "DONATED", "RECYCLED", "TRASHED"].includes(i.status)
-        );
-      } else if (status && status !== "all") {
-        filteredItems = mockItems.filter((i) => i.status === status);
-      }
-
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          items: filteredItems,
-          nextCursor: null,
-          hasMore: false,
-          totalCount: filteredItems.length,
-        }),
-      });
-    });
+    await mockAuthSession(context);
+    await mockUserStats(context);
+    await mockItemsList(context, mockItems);
   });
 
   test("items page is accessible", async ({ page }) => {
-    await page.waitForTimeout(100);
-    await page.goto("/items");
-    await page.waitForLoadState("domcontentloaded");
-
-    const url = page.url();
-    expect(url.includes("/items") || url.includes("/auth/signin")).toBeTruthy();
+    await gotoPage(page, "/items");
+    expectOnPathOrSignIn(page, "/items");
   });
 
-  test("displays list of items", async ({ page, context }) => {
-    await page.waitForTimeout(100);
-    await page.goto("/items");
-    await page.waitForLoadState("domcontentloaded");
+  test("displays list of items", async ({ page }) => {
+    await gotoPage(page, "/items");
 
-    const url = page.url();
     // If redirected to sign-in or 404, skip assertions
-    if (url.includes("/auth/signin")) {
-      test.skip();
-    }
+    skipIfSignedOut(page);
 
     // Check if we got a 404 (timing issue with route setup)
     const has404 = await page.getByText("404").isVisible().catch(() => false);
     if (has404) {
       // Retry navigation
-      await page.goto("/items");
-      await page.waitForLoadState("domcontentloaded");
+      await gotoPage(page, "/items");
     }
 
     // Should display items or My Items header
@@ -153,14 +98,8 @@ test.describe("Items Management", () => {
   });
 
   test("filters items by status", async ({ page }) => {
-    await page.waitForTimeout(100);
-    await page.goto("/items");
-    await page.waitForLoadState("domcontentloaded");
-
-    // If redirected to sign-in, skip this test
-    if (page.url().includes("/auth/signin")) {
-      test.skip();
-    }
+    await gotoPage(page, "/items");
+    skipIfSignedOut(page);
 
     // Look for filter controls
     // Filter may be a select, tabs, or buttons
@@ -172,24 +111,9 @@ test.describe("Items Management", () => {
 
   test("item card shows correct information", async ({ page, context }) => {
     // Mock single item endpoint
-    await context.route("**/api/items/item-1", async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          item: mockItems[0],
-        }),
-      });
-    });
-
-    await page.waitForTimeout(100);
-    await page.goto("/items");
-    await page.waitForLoadState("domcontentloaded");
-
-    // If redirected to sign-in, skip
-    if (page.url().includes("/auth/signin")) {
-      test.skip();
-    }
+    await mockItemEndpoint(context, mockItems[0]);
+    await gotoPage(page, "/items");
+    skipIfSignedOut(page);
 
     // Item cards should show name and recommendation
     const itemText = page.getByText("Vintage Lamp").or(page.getByText("SELL"));
@@ -200,24 +124,9 @@ test.describe("Items Management", () => {
 
   test("can navigate to item detail", async ({ page, context }) => {
     // Mock single item endpoint
-    await context.route("**/api/items/item-1", async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          item: mockItems[0],
-        }),
-      });
-    });
-
-    await page.waitForTimeout(100);
-    await page.goto("/items");
-    await page.waitForLoadState("domcontentloaded");
-
-    // If redirected to sign-in, skip
-    if (page.url().includes("/auth/signin")) {
-      test.skip();
-    }
+    await mockItemEndpoint(context, mockItems[0]);
+    await gotoPage(page, "/items");
+    skipIfSignedOut(page);
 
     // Click on an item to go to detail
     const itemLink = page.getByRole("link", { name: /vintage lamp/i }).or(
@@ -232,24 +141,9 @@ test.describe("Items Management", () => {
 
   test("item detail page shows full information", async ({ page, context }) => {
     // Mock single item endpoint
-    await context.route("**/api/items/item-1", async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          item: mockItems[0],
-        }),
-      });
-    });
-
-    await page.waitForTimeout(100);
-    await page.goto("/items/item-1");
-    await page.waitForLoadState("domcontentloaded");
-
-    // If redirected to sign-in, skip
-    if (page.url().includes("/auth/signin")) {
-      test.skip();
-    }
+    await mockItemEndpoint(context, mockItems[0]);
+    await gotoPage(page, "/items/item-1");
+    skipIfSignedOut(page);
 
     // Should show item details
     await expect(
@@ -261,31 +155,12 @@ test.describe("Items Management", () => {
 
   test("can update item status", async ({ page, context }) => {
     // Mock PATCH endpoint
-    await context.route("**/api/items/item-1", async (route) => {
-      if (route.request().method() === "PATCH") {
-        const updatedItem = { ...mockItems[0], status: "SOLD" };
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({ item: updatedItem }),
-        });
-      } else {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({ item: mockItems[0] }),
-        });
-      }
+    await mockItemEndpoint(context, mockItems[0], {
+      enablePatch: true,
+      updatedStatus: "SOLD",
     });
-
-    await page.waitForTimeout(100);
-    await page.goto("/items/item-1");
-    await page.waitForLoadState("domcontentloaded");
-
-    // If redirected to sign-in, skip
-    if (page.url().includes("/auth/signin")) {
-      test.skip();
-    }
+    await gotoPage(page, "/items/item-1");
+    skipIfSignedOut(page);
 
     // Look for status change button or select
     const statusControl = page.getByRole("combobox").or(
@@ -298,29 +173,9 @@ test.describe("Items Management", () => {
 
   test("can delete item", async ({ page, context }) => {
     // Mock GET for item
-    await context.route("**/api/items/item-1", async (route) => {
-      if (route.request().method() === "DELETE") {
-        await route.fulfill({
-          status: 204,
-          body: "",
-        });
-      } else {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({ item: mockItems[0] }),
-        });
-      }
-    });
-
-    await page.waitForTimeout(100);
-    await page.goto("/items/item-1");
-    await page.waitForLoadState("domcontentloaded");
-
-    // If redirected to sign-in, skip
-    if (page.url().includes("/auth/signin")) {
-      test.skip();
-    }
+    await mockItemEndpoint(context, mockItems[0], { enableDelete: true });
+    await gotoPage(page, "/items/item-1");
+    skipIfSignedOut(page);
 
     // Look for delete button
     const deleteButton = page.getByRole("button", { name: /delete/i });
@@ -330,17 +185,14 @@ test.describe("Items Management", () => {
   });
 
   test("items page works on mobile viewport", async ({ page }) => {
-    await page.waitForTimeout(100);
-    await page.goto("/items");
-    await page.waitForLoadState("domcontentloaded");
+    await gotoPage(page, "/items");
 
     // Verify mobile viewport
     const viewport = page.viewportSize();
     expect(viewport?.width).toBeLessThan(500);
 
     // Page should be accessible
-    const url = page.url();
-    expect(url.includes("/items") || url.includes("/auth/signin")).toBeTruthy();
+    expectOnPathOrSignIn(page, "/items");
   });
 
   test("empty state shows message", async ({ page, context }) => {
@@ -359,14 +211,8 @@ test.describe("Items Management", () => {
       });
     });
 
-    await page.waitForTimeout(100);
-    await page.goto("/items");
-    await page.waitForLoadState("domcontentloaded");
-
-    // If redirected to sign-in, skip
-    if (page.url().includes("/auth/signin")) {
-      test.skip();
-    }
+    await gotoPage(page, "/items");
+    skipIfSignedOut(page);
 
     // Should show empty state message
     await expect(

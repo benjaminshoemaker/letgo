@@ -35,12 +35,12 @@ export type ScanResponse = {
   rateLimitRemaining: number;
 };
 
-export function useScanItem() {
+function useScanMutation<TPayload>(endpoint: string) {
   const queryClient = useQueryClient();
 
-  return useMutation<ScanResponse, ApiError, ScanRequest>({
+  return useMutation<ScanResponse, ApiError, TPayload>({
     mutationFn: async (payload) => {
-      return await fetchJson<ScanResponse>("/api/scan", {
+      return await fetchJson<ScanResponse>(endpoint, {
         method: "POST",
         body: JSON.stringify(payload),
       });
@@ -52,19 +52,10 @@ export function useScanItem() {
   });
 }
 
-export function useManualScanItem() {
-  const queryClient = useQueryClient();
+export function useScanItem() {
+  return useScanMutation<ScanRequest>("/api/scan");
+}
 
-  return useMutation<ScanResponse, ApiError, ManualScanRequest>({
-    mutationFn: async (payload) => {
-      return await fetchJson<ScanResponse>("/api/scan/manual", {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: queryKeys.items.all });
-      await queryClient.invalidateQueries({ queryKey: queryKeys.userStats });
-    },
-  });
+export function useManualScanItem() {
+  return useScanMutation<ManualScanRequest>("/api/scan/manual");
 }

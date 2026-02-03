@@ -2,7 +2,7 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { NextResponse } from "next/server";
 
-import { requireAuth } from "@/lib/auth";
+import { getUserIdOrResponse } from "@/app/api/_auth";
 
 export const runtime = "nodejs";
 
@@ -45,13 +45,8 @@ function sanitizeFilename(filename: string): string {
 }
 
 export async function GET(request: Request) {
-  let userId: string;
-  try {
-    const user = await requireAuth();
-    userId = user.id;
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await getUserIdOrResponse();
+  if (!("userId" in auth)) return auth;
 
   const { searchParams } = new URL(request.url);
   const filename = searchParams.get("filename");
@@ -65,7 +60,7 @@ export async function GET(request: Request) {
   }
 
   const safeFilename = sanitizeFilename(filename);
-  const key = `users/${userId}/items/${Date.now()}-${crypto.randomUUID()}-${safeFilename.replace(
+  const key = `users/${auth.userId}/items/${Date.now()}-${crypto.randomUUID()}-${safeFilename.replace(
     /\.[^/.]+$/,
     ""
   )}.jpg`;

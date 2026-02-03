@@ -9,6 +9,32 @@ export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivEl
   );
 }
 
+function SkeletonTextBlock({ widths }: { widths: string[] }) {
+  return (
+    <div className="space-y-2">
+      {widths.map((width, index) => (
+        <Skeleton key={`${width}-${index}`} className={`h-4 ${width}`} />
+      ))}
+    </div>
+  );
+}
+
+function RecommendationSkeletonCard({ showValue }: { showValue?: boolean }) {
+  return (
+    <div className="rounded-lg border bg-card p-4 shadow-sm">
+      <div className="space-y-4">
+        <div className="flex items-start justify-between gap-3">
+          <Skeleton className="h-5 w-40" />
+          <Skeleton className="h-6 w-16 rounded-full" />
+        </div>
+        {showValue ? <Skeleton className="h-4 w-24" /> : null}
+        <SkeletonTextBlock widths={["w-full", "w-full", "w-3/4"]} />
+        <SkeletonTextBlock widths={["w-full", "w-full", "w-1/2"]} />
+      </div>
+    </div>
+  );
+}
+
 export function ItemCardSkeleton() {
   return (
     <div className="rounded-lg border bg-card p-3 shadow-sm">
@@ -51,25 +77,7 @@ export function ItemDetailSkeleton() {
         <Skeleton className="h-10 w-full rounded-md" />
       </div>
 
-      <div className="rounded-lg border bg-card p-4 shadow-sm">
-        <div className="space-y-4">
-          <div className="flex items-start justify-between gap-3">
-            <Skeleton className="h-5 w-40" />
-            <Skeleton className="h-6 w-16 rounded-full" />
-          </div>
-          <Skeleton className="h-4 w-24" />
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-3/4" />
-          </div>
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-1/2" />
-          </div>
-        </div>
-      </div>
+      <RecommendationSkeletonCard showValue />
 
       <Skeleton className="h-10 w-full rounded-md" />
     </section>
@@ -79,24 +87,7 @@ export function ItemDetailSkeleton() {
 export function ScanResultSkeleton() {
   return (
     <div className="space-y-4">
-      <div className="rounded-lg border bg-card p-4 shadow-sm">
-        <div className="space-y-4">
-          <div className="flex items-start justify-between gap-3">
-            <Skeleton className="h-5 w-40" />
-            <Skeleton className="h-6 w-16 rounded-full" />
-          </div>
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-3/4" />
-          </div>
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-1/2" />
-          </div>
-        </div>
-      </div>
+      <RecommendationSkeletonCard />
       <div className="flex gap-3">
         <Skeleton className="h-10 flex-1 rounded-md" />
         <Skeleton className="h-10 flex-1 rounded-md" />

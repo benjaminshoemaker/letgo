@@ -15,7 +15,6 @@
 
 // Mock auth - must be before importing the routes
 const mockUserId = "test-user-123";
-const otherUserId = "other-user-456";
 
 jest.mock("@/lib/auth", () => ({
   requireAuth: jest.fn(),
@@ -59,6 +58,12 @@ const mockUpdate = prisma.item.update as jest.MockedFunction<
 const mockDeleteMany = prisma.item.deleteMany as jest.MockedFunction<
   typeof prisma.item.deleteMany
 >;
+
+const authUser = {
+  id: mockUserId,
+  email: "test@example.com",
+  name: "Test User",
+};
 
 const mockItems = [
   {
@@ -110,14 +115,32 @@ function createMockRequest(
   } as Request;
 }
 
+function createItemRequest(
+  itemId: string,
+  options?: { method?: string; body?: object }
+) {
+  return createMockRequest(`http://localhost:3000/api/items/${itemId}`, options);
+}
+
+function mockAuthSuccess() {
+  mockRequireAuth.mockResolvedValue(authUser);
+}
+
+async function expectErrorResponse(
+  response: Response,
+  status: number,
+  errorMessage: string
+) {
+  const data = await response.json();
+  expect(response.status).toBe(status);
+  expect(data.error).toBe(errorMessage);
+  return data;
+}
+
 describe("GET /api/items", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockRequireAuth.mockResolvedValue({
-      id: mockUserId,
-      email: "test@example.com",
-      name: "Test User",
-    });
+    mockAuthSuccess();
     mockCount.mockResolvedValue(2);
     mockFindMany.mockResolvedValue(mockItems);
   });
@@ -166,7 +189,6 @@ describe("GET /api/items", () => {
       "http://localhost:3000/api/items?status=DONE"
     );
     const response = await getItems(request);
-    const data = await response.json();
 
     expect(response.status).toBe(200);
     expect(mockFindMany).toHaveBeenCalledWith(
@@ -195,27 +217,21 @@ describe("GET /api/items", () => {
 
     const request = createMockRequest("http://localhost:3000/api/items");
     const response = await getItems(request);
-    const data = await response.json();
 
-    expect(response.status).toBe(401);
-    expect(data.error).toBe("Unauthorized");
+    await expectErrorResponse(response, 401, "Unauthorized");
   });
 });
 
 describe("GET /api/items/[id]", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockRequireAuth.mockResolvedValue({
-      id: mockUserId,
-      email: "test@example.com",
-      name: "Test User",
-    });
+    mockAuthSuccess();
   });
 
   it("returns item for authorized user", async () => {
     mockFindFirst.mockResolvedValue(mockItems[0]);
 
-    const request = createMockRequest("http://localhost:3000/api/items/item-1");
+    const request = createItemRequest("item-1");
     const response = await getItem(request, { params: { id: "item-1" } });
     const data = await response.json();
 
@@ -231,43 +247,33 @@ describe("GET /api/items/[id]", () => {
   it("returns 404 for non-existent item", async () => {
     mockFindFirst.mockResolvedValue(null);
 
-    const request = createMockRequest(
-      "http://localhost:3000/api/items/non-existent"
-    );
+    const request = createItemRequest("non-existent");
     const response = await getItem(request, { params: { id: "non-existent" } });
-    const data = await response.json();
 
-    expect(response.status).toBe(404);
-    expect(data.error).toBe("Not found");
+    await expectErrorResponse(response, 404, "Not found");
   });
 
   it("requires authentication", async () => {
     mockRequireAuth.mockRejectedValue(new Error("Unauthorized"));
 
-    const request = createMockRequest("http://localhost:3000/api/items/item-1");
+    const request = createItemRequest("item-1");
     const response = await getItem(request, { params: { id: "item-1" } });
-    const data = await response.json();
 
-    expect(response.status).toBe(401);
-    expect(data.error).toBe("Unauthorized");
+    await expectErrorResponse(response, 401, "Unauthorized");
   });
 });
 
 describe("PATCH /api/items/[id]", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockRequireAuth.mockResolvedValue({
-      id: mockUserId,
-      email: "test@example.com",
-      name: "Test User",
-    });
+    mockAuthSuccess();
   });
 
   it("updates item status", async () => {
     const updatedItem = { ...mockItems[0], status: "SOLD" };
     mockUpdate.mockResolvedValue(updatedItem);
 
-    const request = createMockRequest("http://localhost:3000/api/items/item-1", {
+    const request = createItemRequest("item-1", {
       method: "PATCH",
       body: { status: "SOLD" },
     });
@@ -285,63 +291,50 @@ describe("PATCH /api/items/[id]", () => {
   });
 
   it("rejects invalid status value", async () => {
-    const request = createMockRequest("http://localhost:3000/api/items/item-1", {
+    const request = createItemRequest("item-1", {
       method: "PATCH",
       body: { status: "INVALID_STATUS" },
     });
     const response = await updateItem(request, { params: { id: "item-1" } });
-    const data = await response.json();
 
-    expect(response.status).toBe(400);
-    expect(data.error).toBe("Invalid status value");
+    await expectErrorResponse(response, 400, "Invalid status value");
   });
 
   it("returns 404 for non-existent item", async () => {
     mockUpdate.mockRejectedValue(new Error("Record not found"));
 
-    const request = createMockRequest(
-      "http://localhost:3000/api/items/non-existent",
-      {
-        method: "PATCH",
-        body: { status: "SOLD" },
-      }
-    );
+    const request = createItemRequest("non-existent", {
+      method: "PATCH",
+      body: { status: "SOLD" },
+    });
     const response = await updateItem(request, {
       params: { id: "non-existent" },
     });
-    const data = await response.json();
 
-    expect(response.status).toBe(404);
-    expect(data.error).toBe("Not found");
+    await expectErrorResponse(response, 404, "Not found");
   });
 
   it("requires at least one update field", async () => {
-    const request = createMockRequest("http://localhost:3000/api/items/item-1", {
+    const request = createItemRequest("item-1", {
       method: "PATCH",
       body: {},
     });
     const response = await updateItem(request, { params: { id: "item-1" } });
-    const data = await response.json();
 
-    expect(response.status).toBe(400);
-    expect(data.error).toBe("No updates provided");
+    await expectErrorResponse(response, 400, "No updates provided");
   });
 });
 
 describe("DELETE /api/items/[id]", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockRequireAuth.mockResolvedValue({
-      id: mockUserId,
-      email: "test@example.com",
-      name: "Test User",
-    });
+    mockAuthSuccess();
   });
 
   it("deletes item successfully", async () => {
     mockDeleteMany.mockResolvedValue({ count: 1 });
 
-    const request = createMockRequest("http://localhost:3000/api/items/item-1", {
+    const request = createItemRequest("item-1", {
       method: "DELETE",
     });
     const response = await deleteItem(request, { params: { id: "item-1" } });
@@ -355,31 +348,24 @@ describe("DELETE /api/items/[id]", () => {
   it("returns 404 for non-existent item", async () => {
     mockDeleteMany.mockResolvedValue({ count: 0 });
 
-    const request = createMockRequest(
-      "http://localhost:3000/api/items/non-existent",
-      {
-        method: "DELETE",
-      }
-    );
+    const request = createItemRequest("non-existent", {
+      method: "DELETE",
+    });
     const response = await deleteItem(request, {
       params: { id: "non-existent" },
     });
-    const data = await response.json();
 
-    expect(response.status).toBe(404);
-    expect(data.error).toBe("Not found");
+    await expectErrorResponse(response, 404, "Not found");
   });
 
   it("requires authentication", async () => {
     mockRequireAuth.mockRejectedValue(new Error("Unauthorized"));
 
-    const request = createMockRequest("http://localhost:3000/api/items/item-1", {
+    const request = createItemRequest("item-1", {
       method: "DELETE",
     });
     const response = await deleteItem(request, { params: { id: "item-1" } });
-    const data = await response.json();
 
-    expect(response.status).toBe(401);
-    expect(data.error).toBe("Unauthorized");
+    await expectErrorResponse(response, 401, "Unauthorized");
   });
 });

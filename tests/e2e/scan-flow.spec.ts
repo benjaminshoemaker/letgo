@@ -1,74 +1,28 @@
 import { test, expect } from "@playwright/test";
-import path from "path";
 
-// Test fixture path
-const TEST_IMAGE_PATH = path.join(__dirname, "../fixtures/test-lamp.jpg");
+import {
+  expectOnPathOrSignIn,
+  gotoPage,
+  mockAuthSession,
+  mockUpload,
+  mockUserStats,
+} from "@/tests/e2e/helpers";
 
 test.describe("Scan Flow", () => {
   // Mock authenticated session and API responses for all tests
   test.beforeEach(async ({ context }) => {
-    // Mock session - authenticated user
-    await context.route("**/api/auth/session", async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          user: {
-            id: "test-user-id",
-            email: "test@example.com",
-            name: "Test User",
-            image: null,
-          },
-          expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        }),
-      });
-    });
-
-    // Mock user stats
-    await context.route("**/api/user/stats", async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          scansToday: 5,
-          limit: 50,
-          scansRemaining: 45,
-          resetAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        }),
-      });
-    });
-
-    // Mock upload endpoint
-    await context.route("**/api/upload", async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          url: "https://example-r2.com/test-image.jpg",
-        }),
-      });
-    });
+    await mockAuthSession(context);
+    await mockUserStats(context);
+    await mockUpload(context, "https://example-r2.com/test-image.jpg");
   });
 
   test("scan page is accessible when authenticated", async ({ page }) => {
-    // Wait for routes to be set up
-    await page.waitForTimeout(100);
-
-    await page.goto("/scan");
-
-    // Wait for the page to settle
-    await page.waitForLoadState("domcontentloaded");
-
-    // Should be on scan page or sign-in page
-    const url = page.url();
-    expect(url.includes("/scan") || url.includes("/auth/signin")).toBeTruthy();
+    await gotoPage(page, "/scan");
+    expectOnPathOrSignIn(page, "/scan");
   });
 
-  test("shows condition selector after image capture", async ({
-    page,
-    context,
-  }) => {
-    await page.goto("/scan");
+  test("shows condition selector after image capture", async ({ page }) => {
+    await gotoPage(page, "/scan");
 
     // Since we can't actually capture camera in tests,
     // we'll check that the condition selector component exists and works
@@ -112,11 +66,8 @@ test.describe("Scan Flow", () => {
       });
     });
 
-    await page.goto("/scan");
-
-    // Server-side auth may redirect to sign-in
-    const url = page.url();
-    expect(url.includes("/scan") || url.includes("/auth/signin")).toBeTruthy();
+    await gotoPage(page, "/scan");
+    expectOnPathOrSignIn(page, "/scan");
   });
 
   test("handles successful scan and shows recommendation", async ({
@@ -153,11 +104,8 @@ test.describe("Scan Flow", () => {
       });
     });
 
-    await page.goto("/scan");
-
-    // Server-side auth may redirect to sign-in
-    const url = page.url();
-    expect(url.includes("/scan") || url.includes("/auth/signin")).toBeTruthy();
+    await gotoPage(page, "/scan");
+    expectOnPathOrSignIn(page, "/scan");
   });
 
   test("handles low confidence with manual fallback", async ({
@@ -204,27 +152,17 @@ test.describe("Scan Flow", () => {
       });
     });
 
-    await page.goto("/scan");
-
-    // Server-side auth may redirect to sign-in
-    const url = page.url();
-    expect(url.includes("/scan") || url.includes("/auth/signin")).toBeTruthy();
+    await gotoPage(page, "/scan");
+    expectOnPathOrSignIn(page, "/scan");
   });
 
   test("handles rate limit error", async ({ page, context }) => {
     // Override user stats to show rate limited
     await context.unroute("**/api/user/stats");
-    await context.route("**/api/user/stats", async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          scansToday: 50,
-          limit: 50,
-          scansRemaining: 0,
-          resetAt: new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString(),
-        }),
-      });
+    await mockUserStats(context, {
+      scansToday: 50,
+      scansRemaining: 0,
+      resetAt: new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString(),
     });
 
     // Mock rate-limited scan
@@ -240,15 +178,12 @@ test.describe("Scan Flow", () => {
       });
     });
 
-    await page.goto("/scan");
-
-    // Server-side auth may redirect to sign-in
-    const url = page.url();
-    expect(url.includes("/scan") || url.includes("/auth/signin")).toBeTruthy();
+    await gotoPage(page, "/scan");
+    expectOnPathOrSignIn(page, "/scan");
   });
 
   test("shows remaining scans count", async ({ page }) => {
-    await page.goto("/scan");
+    await gotoPage(page, "/scan");
 
     // Should display remaining scans somewhere
     // Look for scan limit indicator
@@ -260,14 +195,13 @@ test.describe("Scan Flow", () => {
   });
 
   test("scan page works on mobile viewport", async ({ page }) => {
-    await page.goto("/scan");
+    await gotoPage(page, "/scan");
 
     // Verify mobile viewport
     const viewport = page.viewportSize();
     expect(viewport?.width).toBeLessThan(500);
 
     // Server-side auth may redirect to sign-in
-    const url = page.url();
-    expect(url.includes("/scan") || url.includes("/auth/signin")).toBeTruthy();
+    expectOnPathOrSignIn(page, "/scan");
   });
 });

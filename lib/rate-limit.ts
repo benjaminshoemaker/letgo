@@ -22,6 +22,28 @@ function addUtcDays(date: Date, days: number): Date {
   return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
 }
 
+function getLimitWindow(): { scanLimit: number; resetAt: Date } {
+  const scanLimit = getDailyScanLimit();
+  const today = startOfUtcDay(new Date());
+  const resetAt = addUtcDays(today, 1);
+  return { scanLimit, resetAt };
+}
+
+function buildStatus(
+  scanLimit: number,
+  scansToday: number,
+  resetAt: Date
+): RateLimitStatus {
+  const scansRemaining = Math.max(0, scanLimit - scansToday);
+  return {
+    allowed: scansRemaining > 0,
+    scanLimit,
+    scansToday,
+    scansRemaining,
+    resetAt,
+  };
+}
+
 async function resetIfNewDay(userId: string): Promise<void> {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -42,9 +64,7 @@ async function resetIfNewDay(userId: string): Promise<void> {
 export async function checkRateLimit(userId: string): Promise<RateLimitStatus> {
   await resetIfNewDay(userId);
 
-  const scanLimit = getDailyScanLimit();
-  const today = startOfUtcDay(new Date());
-  const resetAt = addUtcDays(today, 1);
+  const { scanLimit, resetAt } = getLimitWindow();
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -52,23 +72,13 @@ export async function checkRateLimit(userId: string): Promise<RateLimitStatus> {
   });
 
   const scansToday = user?.scanCountToday ?? 0;
-  const scansRemaining = Math.max(0, scanLimit - scansToday);
-
-  return {
-    allowed: scansRemaining > 0,
-    scanLimit,
-    scansToday,
-    scansRemaining,
-    resetAt,
-  };
+  return buildStatus(scanLimit, scansToday, resetAt);
 }
 
 export async function incrementScanCount(userId: string): Promise<RateLimitStatus> {
   await resetIfNewDay(userId);
 
-  const scanLimit = getDailyScanLimit();
-  const today = startOfUtcDay(new Date());
-  const resetAt = addUtcDays(today, 1);
+  const { scanLimit, resetAt } = getLimitWindow();
 
   const user = await prisma.user.update({
     where: { id: userId },
@@ -77,14 +87,5 @@ export async function incrementScanCount(userId: string): Promise<RateLimitStatu
   });
 
   const scansToday = user.scanCountToday;
-  const scansRemaining = Math.max(0, scanLimit - scansToday);
-
-  return {
-    allowed: scansRemaining > 0,
-    scanLimit,
-    scansToday,
-    scansRemaining,
-    resetAt,
-  };
+  return buildStatus(scanLimit, scansToday, resetAt);
 }
-
