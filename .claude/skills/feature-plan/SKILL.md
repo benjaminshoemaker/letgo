@@ -1,11 +1,29 @@
 ---
 name: feature-plan
-description: Generate EXECUTION_PLAN.md and AGENTS_ADDITIONS.md for a feature
+description: Generate EXECUTION_PLAN.md and AGENTS_ADDITIONS.md for a feature. Use after /feature-technical-spec to create the task breakdown.
 argument-hint: <feature-name>
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, Glob, Grep
 ---
 
 Generate the execution plan and agent additions for the feature `$1`.
+
+## Workflow
+
+Copy this checklist and track progress:
+
+```
+Feature Plan Progress:
+- [ ] Directory guard
+- [ ] Handle arguments (feature name)
+- [ ] Check prerequisites (FEATURE_SPEC.md + FEATURE_TECHNICAL_SPEC.md)
+- [ ] Existing file guard (prevent overwrite)
+- [ ] Generate EXECUTION_PLAN.md and AGENTS_ADDITIONS.md
+- [ ] Verify execution skills installed
+- [ ] Codex CLI detection and skill install
+- [ ] Run spec-verification
+- [ ] Run criteria audit
+- [ ] Cross-model review (if Codex available)
+```
 
 ## Directory Guard
 

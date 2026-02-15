@@ -44,10 +44,11 @@ Verify Task Progress:
 - [ ] Step 1: Parse criteria from task
 - [ ] Step 2: Pre-flight check (testability)
 - [ ] Step 3: TDD compliance check
-- [ ] Step 4: Verify each criterion
-- [ ] Step 5: Handle exit conditions
-- [ ] Step 6: Generate report
-- [ ] Step 7: Log to verification-log.jsonl
+- [ ] Step 4: Test quality gate (optional)
+- [ ] Step 5: Verify each criterion
+- [ ] Step 6: Handle exit conditions
+- [ ] Step 7: Generate report
+- [ ] Step 8: Log to verification-log.jsonl
 ```
 
 Follow the code-verification workflow (inline, no sub-agents):
@@ -60,7 +61,7 @@ For each acceptance criterion, create a verification item:
 |-------|-------|
 | ID | `V-001`, `V-002`, etc. |
 | Criterion | The acceptance criterion text |
-| Type | `CODE`, `TEST`, `LINT`, `TYPE`, `BUILD`, `SECURITY`, `BROWSER:*`, or `MANUAL` |
+| Type | `CODE`, `TEST`, `LINT`, `TYPE`, `BUILD`, `SECURITY`, `BROWSER:*`, `MANUAL`, or `MANUAL:DEFER` |
 | Verify | The `Verify:` method (test name, command, route/selector, etc.) |
 | Evidence | Where evidence will be stored (log, screenshot, or output path) |
 | Files | Which files to examine |
@@ -156,7 +157,26 @@ If tests are missing for any criterion, stop and write tests before proceeding.
 - Mark TDD check as SKIPPED (not FAIL)
 - Suggest: Run `/configure-verification` to set up test commands
 
-### Step 4: Verify Each Criterion
+### Step 4: Test Quality Gate (Optional)
+
+This step checks whether tests are *meaningful*, not just present.
+
+If `.claude/verification-config.json` includes `commands.mutation_test`, ask
+whether to run it for this task. If yes, prefer a scoped run (changed files or
+specific test paths). If mutation tests fail, mark the test-quality gate as
+FAIL and stop for fixes.
+
+Otherwise, run this lightweight checklist and record PASS/WARNING:
+
+- Each acceptance criterion has at least one assertion that checks behavior
+- At least one non-happy-path or boundary case is covered when applicable
+- Tests verify state changes or outputs (not just "does not throw")
+- External dependencies are mocked; code under test is not
+
+If any criterion lacks assertions or only smoke-tests behavior, mark the
+test-quality gate as FAIL and stop to improve tests.
+
+### Step 5: Verify Each Criterion
 
 For each criterion:
 
@@ -184,11 +204,15 @@ Verification method by type:
 - **SECURITY**: Run `/security-scan` (or equivalent for config if defined).
 - **CODE**: Inspect the file, export, or command indicated by `Verify:`.
 - **BROWSER:*:** Use the browser-verification skill with route/selector details.
-- **MANUAL**: Attempt automation using the auto-verify skill before listing for human:
+- **MANUAL / MANUAL:DEFER**: Attempt automation using the auto-verify skill:
   1. Invoke auto-verify skill with criterion text and available tools
   2. If PASS: Mark as verified (automated), record method used
   3. If FAIL: Show error and suggested fix, mark as manual with context
-  4. If TRULY_MANUAL: List in report for human review with reason
+  4. If TRULY_MANUAL and tagged `MANUAL:DEFER`:
+     Enqueue to deferred review queue (`.claude/deferred-reviews.json`).
+     Task continues — this does NOT block. Mark checkbox with `— Deferred: {key}`.
+  5. If TRULY_MANUAL and tagged `MANUAL` (blocking):
+     List in report for human review with reason
 
   Report format for attempted automation:
   ```
@@ -198,14 +222,14 @@ Verification method by type:
   Duration: {ms}
   ```
 
-### Step 5: Exit Conditions
+### Step 6: Exit Conditions
 
 Stop verification loop when:
 - PASS: Criterion met
 - 5 attempts exhausted: Mark failed
 - Same failure 3+ times: Flag for human review
 
-### Step 6: Report
+### Step 7: Report
 
 ```
 TASK VERIFICATION: $1
@@ -214,6 +238,10 @@ TASK VERIFICATION: $1
 TDD Compliance:
 - Tests Found: X/Y criteria covered
 - Test-First: PASS | WARNING | UNABLE TO VERIFY
+
+Test Quality Gate:
+- Status: PASS | WARNING | FAIL | SKIPPED
+- Mutation Tests: PASSED | FAILED | SKIPPED
 
 Criteria Verification:
 - Total: N
@@ -231,7 +259,7 @@ TDD Issues (if any):
 - [Criterion] {issue description}
 ```
 
-### Step 7: Verification Log
+### Step 8: Verification Log
 
 Append a JSON line to `.claude/verification-log.jsonl` for each criterion:
 ```json

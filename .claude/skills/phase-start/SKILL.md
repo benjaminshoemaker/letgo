@@ -7,6 +7,24 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, WebFetch, WebSearch
 
 Execute all steps and tasks in Phase $1 from EXECUTION_PLAN.md.
 
+## Workflow
+
+Copy this checklist and track progress:
+
+```
+Phase Start Progress:
+- [ ] Parse arguments and detect execution mode
+- [ ] Context detection (project root vs feature)
+- [ ] Directory guard (EXECUTION_PLAN.md + AGENTS.md)
+- [ ] Context check (compact if <40% remaining)
+- [ ] Codex mode prerequisites (if --codex)
+- [ ] Git setup (commit dirty files, create phase branch)
+- [ ] Execute tasks sequentially (test → implement → verify → commit)
+- [ ] Track state in phase-state.json
+- [ ] Phase completion summary
+- [ ] Auto-advance to checkpoint (if conditions met)
+```
+
 ## Arguments
 
 | Argument | Required | Description |
@@ -80,7 +98,7 @@ When implementing external service integrations:
 
 ## Context Detection
 
-Determine working context:
+Determine working context. **For feature work, users should `cd` into `features/<name>/` before running execution commands.** The skill auto-detects feature mode from the path.
 
 1. If current working directory matches pattern `*/features/*`:
    - PROJECT_ROOT = parent of parent of CWD (e.g., `/project/features/foo` → `/project`)
@@ -212,14 +230,29 @@ See [CODEX_MODE.md](CODEX_MODE.md) for detailed Codex CLI setup and configuratio
 
 3. **Stuck Detection and Recovery**
 
-   Track consecutive failures. If ANY of these occur, **STOP and escalate to human**:
+   Track failures **in `.claude/phase-state.json`** so counters survive context compaction.
 
-   | Trigger | Threshold | Action |
-   |---------|-----------|--------|
-   | Consecutive task failures | 3 tasks | Pause phase |
-   | Same error pattern | 2 occurrences | Pause and report pattern |
-   | Verification loop | 5 attempts on same criterion | Mark task blocked |
-   | Test flakiness | Same test passes then fails | Flag for review |
+   For each task, maintain a `failures` object in the task's state entry:
+   ```json
+   {
+     "consecutive": 0,
+     "verification_attempts": {"V-001": 2, "V-003": 1},
+     "last_errors": ["error msg 1", "error msg 2"]
+   }
+   ```
+
+   - **On task failure**: Increment `consecutive`, append to `last_errors` (keep last 3), write to phase-state.json
+   - **On task success**: Reset `consecutive` to 0, clear `last_errors`
+   - **On verification attempt**: Increment the criterion's count in `verification_attempts`
+
+   **Read these counters before each attempt.** If ANY threshold is met, **STOP and escalate to human**:
+
+   | Trigger | Threshold | Check |
+   |---------|-----------|-------|
+   | Consecutive task failures | 3 tasks | `failures.consecutive >= 3` |
+   | Same error pattern | 2 occurrences | Same error string in `failures.last_errors` twice |
+   | Verification loop | 5 attempts on same criterion | `failures.verification_attempts[criterion] >= 5` |
+   | Test flakiness | Same test passes then fails | Detected during verification (log to `last_errors`) |
 
    **When stuck, report:**
    ```
@@ -262,8 +295,10 @@ Maintain `.claude/phase-state.json` throughout execution. See [STATE_TRACKING.md
 
 Key updates:
 1. **At phase start**: Set status to `IN_PROGRESS` with timestamp and execution mode
-2. **After each task**: Update task entry with `COMPLETE` status
-3. **If blocked**: Record blocker type and description
+2. **After each task**: Update task entry with `COMPLETE` status; reset `failures.consecutive` to 0
+3. **On task failure**: Increment `failures.consecutive`, append error to `failures.last_errors` (max 3)
+4. **On verification attempt**: Increment `failures.verification_attempts[criterion_id]`
+5. **If blocked**: Record blocker type and description
 
 If `.claude/phase-state.json` doesn't exist, run `/populate-state` first to initialize it.
 
@@ -310,20 +345,22 @@ Before evaluating auto-advance conditions, attempt automation on checkpoint manu
 1. Extract manual verification items from "Phase $1 Checkpoint" section in EXECUTION_PLAN.md
 2. For each manual item, invoke auto-verify skill with item text and available tools
 3. Categorize results:
-   - **Automated**: Item can be verified automatically (PASS/FAIL)
-   - **Truly Manual**: No automation possible (subjective criteria like "feels intuitive")
+   - **Automated**: Item verified automatically (PASS/FAIL)
+   - **Truly Manual (blocking)**: No automation, tagged `MANUAL`, downstream dependency
+   - **Truly Manual (deferrable)**: No automation, tagged `MANUAL:DEFER`, no dependency → enqueue to `.claude/deferred-reviews.json`
 
 ### Auto-Advance Conditions
 
 Auto-advance to `/phase-checkpoint $1` ONLY if ALL of these are true:
 
 1. ✓ All tasks in Phase $1 are complete
-2. ✓ No "truly manual" checkpoint items remain (automated items are OK)
+2. ✓ No BLOCKING manual checkpoint items remain
+   (MANUAL:DEFER items are queued to `.claude/deferred-reviews.json`, not blocking)
 3. ✓ No tasks were marked as blocked or skipped
 4. ✓ `--pause` flag was NOT passed to this command
 5. ✓ `autoAdvance.enabled` is true (or not configured, defaulting to true)
 
-**Rationale:** Auto-verify attempts automation before blocking. Only items that genuinely require human judgment (UX, visual aesthetics, brand tone) block auto-advance. Items that can be verified with curl, file checks, or browser automation don't require human presence.
+**Rationale:** Auto-verify attempts automation before blocking. Only items tagged `(MANUAL)` that genuinely require human judgment AND affect downstream work block auto-advance. Items tagged `(MANUAL:DEFER)` are enqueued for later review. Items that can be verified with curl, file checks, or browser automation don't require human presence.
 
 ### If Auto-Advance Conditions Met
 
@@ -351,16 +388,21 @@ PHASE $1 COMPLETE
 All tasks finished.
 
 Cannot auto-advance because:
-- {reason: e.g., "Phase has truly manual verification items"}
+- {reason: e.g., "Phase has blocking manual verification items"}
 
 Checkpoint Verification Preview:
 --------------------------------
 Automatable ({N} items):
 - [auto] "{item}" — can verify with {method}
 
-Truly Manual ({N} items requiring human judgment):
+Blocking Manual ({N} items requiring human judgment):
 - [ ] "{item}"
-  - Reason: {why automation not possible, e.g., "subjective UX assessment"}
+  - Reason: {why this blocks downstream work}
+
+{If deferred items exist:}
+Deferred ({N} items queued for later review):
+- "{item}" — no downstream dependency
+{/If}
 
 Next: Run /phase-checkpoint $1 when ready to verify
 

@@ -1,11 +1,28 @@
 ---
 name: feature-technical-spec
-description: Generate FEATURE_TECHNICAL_SPEC.md through guided Q&A
+description: Define technical approach (architecture, integration points, data model) for a feature through guided Q&A and write FEATURE_TECHNICAL_SPEC.md. Use after /feature-spec.
 argument-hint: <feature-name>
 allowed-tools: Bash, Read, Write, Edit, AskUserQuestion, Glob, Grep
 ---
 
 Generate a feature technical specification document for the feature `$1`.
+
+## Workflow
+
+Copy this checklist and track progress:
+
+```
+Feature Technical Spec Progress:
+- [ ] Directory guard
+- [ ] Check prerequisites (FEATURE_SPEC.md exists)
+- [ ] Existing file guard (prevent overwrite)
+- [ ] Existing code analysis (similar functionality, patterns, integration points)
+- [ ] Codebase maturity assessment
+- [ ] Generate FEATURE_TECHNICAL_SPEC.md
+- [ ] Run spec-verification
+- [ ] Capture deferred requirements
+- [ ] Cross-model review (if Codex available)
+```
 
 ## Directory Guard
 

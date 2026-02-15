@@ -104,15 +104,15 @@ Read `.claude/settings.local.json` for settings:
 
 ```bash
 # Read config
-CODE_MODEL=$(jq -r '.codexReview.codeModel // "gpt-5.2-codex"' .claude/settings.local.json 2>/dev/null || echo "gpt-5.2-codex")
-TIMEOUT_MINS=$(jq -r '.codexReview.reviewTimeoutMinutes // 10' .claude/settings.local.json 2>/dev/null || echo "10")
+CODE_MODEL=$(jq -r '.codexReview.codeModel // "gpt-5.3-codex"' .claude/settings.local.json 2>/dev/null || echo "gpt-5.3-codex")
+TIMEOUT_MINS=$(jq -r '.codexReview.reviewTimeoutMinutes // 20' .claude/settings.local.json 2>/dev/null || echo "20")
 ```
 
 If `codexReview.enabled` is explicitly `false`, skip with message.
 
 ### Select Model
 
-Priority order: `--model` flag > config > default (`gpt-5.2-codex`)
+Priority order: `--model` flag > config > default (`gpt-5.3-codex`)
 
 ```bash
 # 1. Explicit --model flag always wins
@@ -171,6 +171,24 @@ See [CODEX_INVOCATION.md](CODEX_INVOCATION.md) for detailed command building.
 - Use the Bash tool's `timeout` parameter set to `TIMEOUT_MINS * 60 * 1000` (ms)
   instead of the shell `timeout` command or `run_in_background`.
 
+### Safety Guard (prevent accidental commits)
+
+Before invoking Codex, protect the working tree:
+
+```bash
+# Record current HEAD so we can detect if Codex makes commits
+HEAD_BEFORE=$(git rev-parse HEAD)
+
+# Stash uncommitted changes (if any) to protect working tree
+STASHED=false
+if ! git diff --quiet HEAD 2>/dev/null || ! git diff --cached --quiet 2>/dev/null; then
+  git stash push -m "codex-review-safety-$(date +%s)" --include-untracked
+  STASHED=true
+fi
+```
+
+### Invoke Codex
+
 ```bash
 OUTPUT_FILE="/tmp/codex-review-output-$(date +%s).txt"
 
@@ -180,15 +198,31 @@ if [ -n "$CODEX_MODEL" ]; then
   MODEL_FLAG="--model $CODEX_MODEL"
 fi
 
-# Execute with timeout
-timeout $((TIMEOUT_MINS * 60)) bash -c "cat {prompt_file} | codex exec \
+# Execute (use Bash tool's timeout parameter for timeout — NOT shell `timeout`)
+cat {prompt_file} | codex exec \
   --sandbox danger-full-access \
-  -c 'approval_policy=\"never\"' \
+  -c 'approval_policy="never"' \
   -c 'features.search=true' \
   $MODEL_FLAG \
   -o $OUTPUT_FILE \
-  -"
+  -
 EXIT_CODE=$?
+```
+
+### Post-Invocation Safety Check
+
+```bash
+# Check if Codex made any commits
+HEAD_AFTER=$(git rev-parse HEAD)
+if [ "$HEAD_BEFORE" != "$HEAD_AFTER" ]; then
+  echo "WARNING: Codex made commits during review. Reverting to pre-review state."
+  git reset --hard "$HEAD_BEFORE"
+fi
+
+# Restore stashed changes
+if [ "$STASHED" = true ]; then
+  git stash pop
+fi
 ```
 
 **Flags explained:**
@@ -267,8 +301,8 @@ Read from `.claude/settings.local.json`:
 {
   "codexReview": {
     "enabled": true,
-    "codeModel": "gpt-5.2-codex",
-    "reviewTimeoutMinutes": 10
+    "codeModel": "gpt-5.3-codex",
+    "reviewTimeoutMinutes": 20
   }
 }
 ```
@@ -276,8 +310,8 @@ Read from `.claude/settings.local.json`:
 | Setting | Default | Description |
 |---------|---------|-------------|
 | `enabled` | `true` | Set to `false` to disable Codex review |
-| `codeModel` | `"gpt-5.2-codex"` | Model for code review tasks |
-| `reviewTimeoutMinutes` | `10` | Max time for review invocations |
+| `codeModel` | `"gpt-5.3-codex"` | Model for code review tasks |
+| `reviewTimeoutMinutes` | `20` | Max time for review invocations |
 
 For document consultation (specs, plans), see `/codex-consult` which uses `codexConsult` config.
 For task execution via Codex, see `/phase-start --codex` which uses `codexReview.taskTimeoutMinutes`.

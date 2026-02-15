@@ -105,7 +105,7 @@ Read `.claude/settings.local.json` for settings:
 ```bash
 # Read model from config (codexConsult with fallback to codexReview)
 CONSULT_MODEL=$(jq -r '.codexConsult.researchModel // .codexReview.researchModel // "gpt-5.2"' .claude/settings.local.json 2>/dev/null || echo "gpt-5.2")
-TIMEOUT_MINS=$(jq -r '.codexConsult.consultTimeoutMinutes // 15' .claude/settings.local.json 2>/dev/null || echo "15")
+TIMEOUT_MINS=$(jq -r '.codexConsult.consultTimeoutMinutes // 20' .claude/settings.local.json 2>/dev/null || echo "20")
 ```
 
 Check enabled status (fallback chain):
@@ -167,6 +167,24 @@ See [CODEX_INVOCATION.md](CODEX_INVOCATION.md) for detailed command building.
 - Use the Bash tool's `timeout` parameter set to `TIMEOUT_MINS * 60 * 1000` (ms)
   instead of the shell `timeout` command or `run_in_background`.
 
+### Safety Guard (prevent accidental commits)
+
+Before invoking Codex, protect the working tree:
+
+```bash
+# Record current HEAD so we can detect if Codex makes commits
+HEAD_BEFORE=$(git rev-parse HEAD)
+
+# Stash uncommitted changes (if any) to protect working tree
+STASHED=false
+if ! git diff --quiet HEAD 2>/dev/null || ! git diff --cached --quiet 2>/dev/null; then
+  git stash push -m "codex-consult-safety-$(date +%s)" --include-untracked
+  STASHED=true
+fi
+```
+
+### Invoke Codex
+
 ```bash
 OUTPUT_FILE="/tmp/codex-consult-output-$(date +%s).txt"
 
@@ -176,15 +194,31 @@ if [ -n "$CODEX_MODEL" ]; then
   MODEL_FLAG="--model $CODEX_MODEL"
 fi
 
-# Execute with timeout
-timeout $((TIMEOUT_MINS * 60)) bash -c "cat {prompt_file} | codex exec \
+# Execute (use Bash tool's timeout parameter for timeout — NOT shell `timeout`)
+cat {prompt_file} | codex exec \
   --sandbox danger-full-access \
-  -c 'approval_policy=\"never\"' \
+  -c 'approval_policy="never"' \
   -c 'features.search=true' \
   $MODEL_FLAG \
   -o $OUTPUT_FILE \
-  -"
+  -
 EXIT_CODE=$?
+```
+
+### Post-Invocation Safety Check
+
+```bash
+# Check if Codex made any commits
+HEAD_AFTER=$(git rev-parse HEAD)
+if [ "$HEAD_BEFORE" != "$HEAD_AFTER" ]; then
+  echo "WARNING: Codex made commits during consultation. Reverting to pre-consult state."
+  git reset --hard "$HEAD_BEFORE"
+fi
+
+# Restore stashed changes
+if [ "$STASHED" = true ]; then
+  git stash pop
+fi
 ```
 
 **Important:** Do NOT use `2>&1` — Codex streams progress to stderr and final output to stdout. Merging them corrupts the parseable response.
@@ -257,7 +291,7 @@ Read from `.claude/settings.local.json`:
   "codexConsult": {
     "enabled": true,
     "researchModel": "gpt-5.2",
-    "consultTimeoutMinutes": 15
+    "consultTimeoutMinutes": 20
   }
 }
 ```
@@ -266,7 +300,7 @@ Read from `.claude/settings.local.json`:
 |---------|---------|----------|-------------|
 | `enabled` | `true` | `codexReview.enabled` | Set to `false` to disable consultation |
 | `researchModel` | `"gpt-5.2"` | `codexReview.researchModel` | Model for consultation tasks |
-| `consultTimeoutMinutes` | `15` | — | Max time for consultation invocations |
+| `consultTimeoutMinutes` | `20` | — | Max time for consultation invocations |
 
 Existing `codexReview.researchModel` config continues to work via fallback.
 
