@@ -1,8 +1,13 @@
 # AGENTS.md
 
-Workflow guidelines for AI agents executing tasks from EXECUTION_PLAN.md.
+Project-wide workflow guidance for AI agents working in this project.
 
----
+## Instruction Hierarchy
+
+- This file is the durable, project-wide baseline.
+- Initial greenfield execution guidance lives in `plans/greenfield/AGENTS.md`.
+- Feature execution guidance lives in `features/<name>/AGENTS.md`.
+- When working in a scoped directory, read this file first, then the local `AGENTS.md` or `CLAUDE.md` in that directory.
 
 ## Project Context
 
@@ -16,134 +21,6 @@ Workflow guidelines for AI agents executing tasks from EXECUTION_PLAN.md.
 - Package Manager: npm
 
 **Dev Server:** `npm run dev` → `http://localhost:3000` (wait 5s for startup)
-
----
-
-## Workflow
-
-```
-HUMAN (Orchestrator)
-├── Completes pre-phase setup
-├── Assigns tasks from EXECUTION_PLAN.md
-├── Reviews and approves at phase checkpoints
-
-AGENT (Executor)
-├── Executes one task at a time
-├── Works in git branch
-├── Follows TDD: tests first, then implementation
-├── Runs verification against acceptance criteria
-└── Reports completion or blockers
-```
-
----
-
-## Task Execution
-
-1. **Load context** — Read AGENTS.md, TECHNICAL_SPEC.md, and your task from EXECUTION_PLAN.md
-2. **Check CLAUDE.md** — Read project root CLAUDE.md if it exists
-3. **Verify dependencies** — Confirm prior tasks are complete by checking for expected files/exports
-4. **Write tests first** — One test per acceptance criterion (when applicable)
-5. **Implement** — Minimum code to pass tests and satisfy acceptance criteria
-6. **Verify** — Run all tests, confirm acceptance criteria met
-7. **Update progress** — Check off completed acceptance criteria in EXECUTION_PLAN.md
-8. **Commit** — Format: `task(1.1.A): brief description`
-
----
-
-## Context Management
-
-**Start fresh for each task.** Do not carry conversation history between tasks.
-
-Before starting any task, load:
-1. AGENTS.md (this file)
-2. TECHNICAL_SPEC.md
-3. Your task definition from EXECUTION_PLAN.md
-
-**Preserve context while debugging.** If tests fail within a task, continue in the same conversation until resolved.
-
-```
-Task N starts (fresh)
-    → Write tests (if applicable)
-    → Implement
-    → Tests fail → Debug (keep context) → Fix
-    → Tests pass
-    → Task complete
-Task N+1 starts (fresh)
-```
-
----
-
-## Testing Policy
-
-**When to write tests:**
-- Phase 8 tasks: Always (this is the testing phase)
-- API routes: Write tests in Phase 8, not during initial implementation
-- Utility functions: Write tests in Phase 8
-- UI components: Write tests in Phase 8
-- Pre-Phase 8: Focus on implementation, verify manually
-
-**Test rules:**
-- All tests must pass before reporting complete
-- Never skip or disable tests to make them pass
-- Never claim "working" when functionality is broken
-- Read full error output before attempting fixes
-- Run `npm run lint` and `npm run build` to catch type errors
-
-**Verification commands:**
-```bash
-npm run lint          # Check for lint errors
-npm run build         # Type check and build
-npm test              # Run Jest tests (Phase 8+)
-npm run test:e2e      # Run Playwright tests (Phase 8+)
-```
-
----
-
-## When to Stop and Ask
-
-Stop and ask the human if:
-- A dependency is missing (file, function, service doesn't exist)
-- You need environment variables or secrets not yet configured
-- Acceptance criteria are ambiguous or contradictory
-- A test fails and you cannot determine why after reading full error output
-- You need to modify files outside your task scope
-- The spec doesn't cover a scenario you've encountered
-- You discover a security concern
-
-**Blocker format:**
-```
-BLOCKED: Task {id}
-Issue: {what's wrong}
-Tried: {what you attempted}
-Need: {what would unblock}
-```
-
----
-
-## Completion Report
-
-When done with a task, report:
-
-```
-COMPLETE: Task {id}
-
-What was built:
-{1-2 sentence summary}
-
-Files created:
-- {path}
-- {path}
-
-Files modified:
-- {path}
-
-Verification:
-- npm run build: ✓
-- npm run lint: ✓
-- Manual test: {what you verified}
-
-Commit: {hash or "ready to commit"}
-```
 
 ---
 
@@ -288,49 +165,6 @@ During development, you will discover items that need attention but are outside 
 
 ---
 
-## Phase-Specific Notes
-
-### Phase 1: Foundation
-- Focus on getting auth working end-to-end
-- Verify Google OAuth in production before moving on
-- Database should be empty but accessible
-
-### Phase 2: Image Upload
-- Test camera on actual mobile device
-- Verify R2 uploads work before moving on
-- Check both iOS Safari and Android Chrome
-
-### Phase 3: AI Integration
-- AI responses may vary — focus on structure, not exact content
-- Test with real images, not just fixtures
-- Verify hazard detection with battery/electronics images
-
-### Phase 4: Manual Fallback
-- Test with genuinely ambiguous items
-- Ensure fallback flow is smooth, not jarring
-
-### Phase 5: Items List
-- Test pagination if list grows large
-- Verify filters work correctly
-- Check status transitions
-
-### Phase 6: Rate Limiting
-- Test limit actually blocks at 50
-- Verify count resets at midnight
-- Don't forget to test both scan endpoints
-
-### Phase 7: PWA & Polish
-- Test PWA install on real devices
-- Check offline behavior
-- Run Lighthouse audit
-
-### Phase 8: Testing
-- Mock external services (OpenAI, R2)
-- Use test database for integration tests
-- E2E tests need auth handling (mock or test account)
-
----
-
 ## Troubleshooting
 
 ### "Module not found" errors
@@ -344,12 +178,12 @@ During development, you will discover items that need attention but are outside 
 - Try `npx prisma db push` to verify connection
 
 ### Auth not working
-- Verify all NEXTAUTH_* and GOOGLE_* variables set
+- Verify all `NEXTAUTH_*` and `GOOGLE_*` variables are set
 - Check Google Cloud Console for OAuth config
 - Ensure callback URLs include your domain
 
 ### R2 upload failures
-- Verify all R2_* variables set
+- Verify all `R2_*` variables are set
 - Check CORS configuration in R2 dashboard
 - Verify presigned URL not expired
 
